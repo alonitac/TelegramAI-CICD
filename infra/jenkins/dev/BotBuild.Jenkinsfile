@@ -14,7 +14,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'lidoror-bot-k0s'
         IMAGE_TAG = "${GIT_COMMIT}"
-        REPO_URL = '700935310038.dkr.ecr.us-west-2.amazonaws.com/lidoror-bot-k0s'
+        REPO_URL = '700935310038.dkr.ecr.us-west-2.amazonaws.com'
     }
 
     stages {
