@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image '700935310038.dkr.ecr.us-west-2.amazonaws.com/lidoror-jenkinsagent-k0s:2'
+            image '700935310038.dkr.ecr.us-west-2.amazonaws.com/lidoror-jenkins-agent:latest'
             args  '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
