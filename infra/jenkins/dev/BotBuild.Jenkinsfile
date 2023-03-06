@@ -7,7 +7,6 @@ pipeline {
     }
 
     options {
-        retry(2)
         timestamps()
         timeout(time: 30, unit: 'MINUTES')
     }
