@@ -8,11 +8,13 @@ RUN yum update -y \
   && ./aws/install --bin-dir /aws-cli-bin/
 
 # kubectl
-# TODO install kubectl here, then copy the binary into the below image stage
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+RUN chmod +x ./kubectl
+RUN mv ./kubectl /usr/local/bin
 
 FROM jenkins/agent
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/
 COPY --from=installer /usr/local/aws-cli/ /usr/local/aws-cli/
 COPY --from=installer /aws-cli-bin/ /usr/local/bin/
-
+COPY --from=installer /usr/local/bin/kubectl /usr/local/bin/
 
