@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image '700935310038.dkr.ecr.us-east-1.amazonaws.com/lidoror-jenkins-agent:latest'
+            image '700935310038.dkr.ecr.us-west-2.amazonaws.com/lidoror-jenkinsagent-k0s:2'
             args  '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -38,7 +38,7 @@ pipeline {
 
         stage('Trigger Deploy') {
             steps {
-                build job: 'BotDeploy', wait: false, parameters: [
+                build job: 'botDeploy', wait: false, parameters: [
                     string(name: 'BOT_IMAGE_NAME', value: "${IMAGE_NAME}"),
                 ]
             }
