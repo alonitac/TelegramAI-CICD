@@ -21,10 +21,10 @@ spec:
       - name: bot
         image: 
         resources:
-      requests:
-        memory: "300Mi"
-        cpu: "500m"
-      limits:
-        memory: "300Mi"
-        cpu: "500m"
+          requests:
+            memory: "300Mi"
+            cpu: "500m"
+          limits:
+            memory: "300Mi"
+            cpu: "500m"
         
