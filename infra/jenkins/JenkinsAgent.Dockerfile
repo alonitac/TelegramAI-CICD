@@ -14,3 +14,9 @@ COPY --from=installer /usr/local/aws-cli/ /usr/local/aws-cli/
 COPY --from=installer /aws-cli-bin/ /usr/local/bin/
 COPY --from=bitnami/kubectl:1.20.9 /opt/bitnami/kubectl/bin/kubectl /usr/local/bin/
 
+USER root
+RUN apt-get update
+
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+USER jenkins
