@@ -16,6 +16,7 @@ pipeline {
         APP_NAME = "bot"
         APP_ENV = "dev"
         K8S_DEPLOYMENT_FILE = "bot_to_deploy.yaml"
+        K8S_YAML_TO_EDIT = 'infra/k8s/bot.yaml'
     }
 
     parameters {
