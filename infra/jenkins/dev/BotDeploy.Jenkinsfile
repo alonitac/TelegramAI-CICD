@@ -7,6 +7,11 @@ pipeline {
         }
     }
 
+    options {
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
     environment {
         APP_NAME = "bot"
         APP_ENV = "dev"
@@ -18,6 +23,15 @@ pipeline {
     }
 
     stages {
+
+        stage('Deployment File Creation') {
+            steps{
+                sh 'pip3 install pyyaml'
+                sh 'python3 scriptsk8s_deployment_yaml_customize.py
+            }
+        }
+
+
         stage('Bot Deploy') {
             steps {
                 withCredentials([
