@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-deployment
+  labels:
+    app: worker
+    env:
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: worker
+      env:
+  template:
+    metadata:
+      labels:
+        app: worker
+        env:
+    spec:
+      containers:
+      - name: worker
+        image:
+        resources:
+      requests:
+        memory: "300Mi"
+        cpu: "500m"
+      limits:
+        memory: "300Mi"
+        cpu: "500m"
+        
