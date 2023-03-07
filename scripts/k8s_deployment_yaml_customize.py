@@ -13,6 +13,7 @@ with open(file_to_open) as file:
     y["spec"]["selector"]["matchLabels"]["env"] = env
     y["spec"]["template"]["metadata"]["labels"]["env"] = env
     y["spec"]["template"]["spec"]["containers"][0]["image"] = image
+    y["spec"]["template"]["spec"]["containers"][0]["env"]["value"] = env
 
 with open(file_to_save, 'w') as deploy:
     yaml.dump(y, deploy)

@@ -20,6 +20,9 @@ spec:
       containers:
       - name: bot
         image: 
+        env:
+          - name: ENV
+            value: 
         resources:
           requests:
             memory: "300Mi"
