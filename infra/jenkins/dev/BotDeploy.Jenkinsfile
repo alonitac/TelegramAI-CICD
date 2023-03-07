@@ -27,7 +27,7 @@ pipeline {
         stage('Deployment File Creation') {
             steps{
                 sh 'pip3 install pyyaml'
-                sh 'python3 scriptsk8s_deployment_yaml_customize.py
+                sh 'python3 k8s_deployment_yaml_customize.py'
             }
         }
 
