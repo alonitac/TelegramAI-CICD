@@ -34,6 +34,11 @@ pipeline {
                 sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REPO_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
                 sh "docker push ${REPO_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
             }
+            post {
+                    always {
+                        sh 'docker image prune -a --filter "until=64h" --force'
+                    }
+                }
         }
 
         stage('Trigger Deploy') {
@@ -45,3 +50,4 @@ pipeline {
         }
     }
 }
+
