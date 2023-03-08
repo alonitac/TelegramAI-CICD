@@ -6,7 +6,7 @@ metadata:
     app: bot
     env: 
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: worker
@@ -26,8 +26,8 @@ spec:
         resources:
           requests:
             memory: "300Mi"
-            cpu: "1500m"
+            cpu: "500m"
           limits:
             memory: "300Mi"
-            cpu: "1500m"
+            cpu: "500m"
         
