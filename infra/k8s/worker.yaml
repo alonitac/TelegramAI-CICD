@@ -3,23 +3,23 @@ kind: Deployment
 metadata:
   name: worker-deployment
   labels:
-    app: worker
-    env:
+    app: bot
+    env: 
 spec:
   replicas: 3
   selector:
     matchLabels:
       app: worker
-      env:
+      env: 
   template:
     metadata:
       labels:
         app: worker
-        env:
+        env: 
     spec:
       containers:
       - name: worker
-        image:
+        image: 
         env:
           - name: ENV
             value: 
