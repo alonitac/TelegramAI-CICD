@@ -16,7 +16,7 @@ pipeline {
         IMAGE_TAG = "${GIT_COMMIT}"
         REPO_URL = '700935310038.dkr.ecr.us-west-2.amazonaws.com'
     }
-    
+
     stages {
         stage('ECR Login') {
             steps {

@@ -10,6 +10,7 @@ pipeline {
     options {
         timestamps()
         timeout(time: 30, unit: 'MINUTES')
+
     }
     environment {
         IMAGE_NAME = 'lidoror-k0s-bot-prod'
