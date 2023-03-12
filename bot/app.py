@@ -7,7 +7,7 @@ import json
 
 
 class Bot:
-
+    # this is a trial commment
     def __init__(self, token):
         self.bot = telebot.TeleBot(token, threaded=False)
         self.bot.set_update_listener(self._bot_internal_handler)
@@ -44,7 +44,8 @@ class Bot:
         :return:
         """
         if self.current_msg.content_type != 'photo':
-            raise RuntimeError(f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
+            raise RuntimeError(
+                f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
 
         file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
         data = self.bot.download_file(file_info.file_path)
