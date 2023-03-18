@@ -1,5 +1,5 @@
 {
-  "aws_region": "ue-north-1",
+  "aws_region": "eu-north-1",
   "bot_to_worker_queue_name": "aleksei-prod-queue",
   "telegram_token_secret_name": "aleksei/prod/key",
   "videos_bucket": "aleksei-prod-bucket"
