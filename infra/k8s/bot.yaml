@@ -16,5 +16,6 @@ spec:
       containers:
         - name: BotApp
           image: 700935310038.dkr.ecr.eu-north-1.amazonaws.com/url-bot:latest
-          ports:
-            - containerPort: 80
+          env:
+            - name: ENV
+              value: ""
