@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: bot
-        image: 700935310038.dkr.ecr.eu-north-1.amazonaws.com/
+        image: $(BOT_IMAGE_NAME)
         env:
           - name: ENV
             value: ""
