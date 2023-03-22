@@ -9,9 +9,9 @@ RUN yum update -y \
 
 # kubectl
 # TODO install kubectl here, then copy the binary into the below image stage
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$k8sversion/bin/linux/amd64/kubectl
 RUN chmod +x ./kubectl
-RUN mv ./kubectl /usr/local/bin/
+RUN mv ./kubectl /usr/local/bin/kubectl
 
 FROM jenkins/agent
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/

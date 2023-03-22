@@ -1,28 +1,29 @@
-# TODO implement the kubernetes manifest here
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bot-deployment
+  labels:
+    app: bot
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: bot
-  replicas: 2 # tells deployment to run 2 pods matching the template
   template:
     metadata:
       labels:
         app: bot
     spec:
       containers:
-        - name: bot
-          image:
-          env:
-            - name: ENV
-              value: ""
-          resources:
-            requests:
-              memory: "250Mi"
-              cpu: "250m"
-            limits:
-              memory: "250Mi"
-              cpu: "250m"
+      - name: bot
+        image: 700935310038.dkr.ecr.eu-north-1.amazonaws.com
+        env:
+          - name: ENV
+            value: ""
+            resources:
+              requests:
+                memory: "250Mi"
+                cpu: "250m"
+              limits:
+                memory: "250Mi"
+                cpu: "250m"
