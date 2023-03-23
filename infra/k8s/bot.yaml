@@ -2,10 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bot-deployment
-  labels:
-    app: bot
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: bot
@@ -15,8 +13,10 @@ spec:
         app: bot
     spec:
       containers:
-      - name: bot
-        image: $(BOT_IMAGE_NAME)
-        env:
-          - name: ENV
-            value: ""
+        - name: bot-container
+          image: $(configMapKeyRef: my-config, key: image)
+          ports:
+            - containerPort:
+          env:
+            - name: APP_ENV
+              value: "dev"
