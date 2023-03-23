@@ -23,9 +23,8 @@ pipeline {
                 ]) {
                     sh '''
                     IMAGE_NAME=${BOT_IMAGE_NAME}
-                    aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.eu-north-1.amazonaws.com
 
-                    docker pull $IMAGE_NAME
+
                     # apply the configurations to k8s cluster
                     kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
                     kubectl set image deployment/bot-deployment bot=$IMAGE_NAME --kubeconfig ${KUBECONFIG} -n dev
