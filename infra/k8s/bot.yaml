@@ -16,7 +16,7 @@ spec:
         - name: bot-container
           image: IMAGE_NAME
           ports:
-            - containerPort:
+
           env:
             - name: APP_ENV
               value: "dev"
