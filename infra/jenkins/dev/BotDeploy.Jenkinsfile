@@ -23,8 +23,7 @@ pipeline {
                 ]) {
                     sh '''
                     IMAGE_NAME=${BOT_IMAGE_NAME}
-
-
+                    sed -i "s%IMAGE_NAME%$BOT_IMAGE_NAME%g" infra/k8s/bot.yaml
                     # apply the configurations to k8s cluster
                     kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
                     kubectl set image deployment/bot-deployment bot=$IMAGE_NAME --kubeconfig ${KUBECONFIG} -n dev
