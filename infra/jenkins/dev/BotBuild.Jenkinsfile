@@ -30,6 +30,7 @@ pipeline {
                 docker build -t $IMAGE_NAME:$BUILD_NUMBER -f bot/Dockerfile .
                 docker tag $IMAGE_NAME:$BUILD_NUMBER $REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER
                 docker push $REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER
+                cat $REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER
                 '''
             }
             post {
@@ -42,7 +43,7 @@ pipeline {
         stage('Trigger Deploy') {
             steps {
                 build job: 'BotDeploy', wait: false, parameters: [
-                    string(name: 'BOT_IMAGE_NAME', value: '$REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER')
+                    string(name: 'BOT_IMAGE_NAME', value: '$REGISTRY_URL/$IMAGE_NAME:$IMAGE_TAG')
                 ]
             }
         }
