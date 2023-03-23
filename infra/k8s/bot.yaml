@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bot-container
-          image: $(configMapKeyRef: my-config, key: image)
+          image: "${BOT_IMAGE_NAME}"
           ports:
             - containerPort:
           env:
