@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: bot
-          image: "{BOT_IMAGE_NAME}"
+          image: BOT_IMAGE
           ports:
 
           env:
