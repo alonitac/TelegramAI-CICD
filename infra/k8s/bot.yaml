@@ -13,7 +13,7 @@ spec:
         app: bot
     spec:
       containers:
-        - name: bot-container
+        - name: bot
           image: BOT_IMAGE_NAME
           ports:
 
