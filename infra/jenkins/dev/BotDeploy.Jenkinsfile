@@ -27,7 +27,7 @@ pipeline {
                     sh '''
                     # apply the configurations to k8s cluster
                     sed -i 's/{{BOT_IMAGE_NAME}}/BOT_IMAGE/g' infra/k8s/bot.yaml
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespaces dev
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
                     aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.eu-north-1.amazonaws.com
 
                     '''
