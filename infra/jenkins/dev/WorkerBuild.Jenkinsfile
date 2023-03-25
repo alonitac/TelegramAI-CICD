@@ -7,5 +7,46 @@ pipeline {
         }
     }
 
-    // TODO dev worker build stages here
+    options {
+        timestamps()
+    }
+
+    environment {
+        REGISTRY_URL = '700935310038.dkr.ecr.eu-north-1.amazonaws.com'
+        IMAGE_NAME = 'url-worker'
+        IMAGE_TAG = '${BUILD_NUMBER}'
+
+    }
+
+
+
+
+    stages {
+        stage('Build') {
+            steps {
+                // TODO dev bot build stage
+                sh '''
+                aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin $REGISTRY_URL
+                docker build -t $IMAGE_NAME:$BUILD_NUMBER -f worker/Dockerfile .
+                docker tag $IMAGE_NAME:$BUILD_NUMBER $REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER
+                docker push $REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER
+
+
+                '''
+            }
+            post {
+               always {
+                   sh 'docker image prune -a --filter "until=240h" --force'
+               }
+            }
+        }
+
+        stage('Trigger Deploy') {
+            steps {
+                build job: 'WorkerDeploy', wait: false, parameters: [
+                    string(name: 'WORKER_IMAGE_NAME', value: "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}")
+                ]
+            }
+        }
+    }
 }
