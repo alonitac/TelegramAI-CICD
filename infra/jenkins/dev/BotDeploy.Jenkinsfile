@@ -22,10 +22,15 @@ pipeline {
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
-                    echo "BOT_IMAGE_NAME: ${BOT_IMAGE_NAME}"
-                    sed -i "s%IMAGE_NAME%${BOT_IMAGE_NAME}%g" infra/k8s/bot.yaml
+
+
+                    #echo "BOT_IMAGE_NAME: ${BOT_IMAGE_NAME}"
+                    #sed -i "s%IMAGE_NAME%${BOT_IMAGE_NAME}%g" infra/k8s/bot.yaml
                     # apply the configurations to k8s cluster
                     kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
+                    kubectl set image deployment/bot-deployment bot=${BOT_IMAGE_NAME} -n ${APP_ENV}
+                    kubectl rollout status deployment/bot-deployment -n ${APP_ENV}
+                    kubectl get deployments bot-deployment -n ${APP_ENV}
                     # kubectl set image deployment/bot-deployment bot=$IMAGE_NAME --kubeconfig ${KUBECONFIG} -n dev
                     aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.eu-north-1.amazonaws.com
 
