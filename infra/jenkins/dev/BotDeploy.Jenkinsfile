@@ -12,8 +12,14 @@ pipeline {
     }
 
     parameters {
-        string(name: 'BOT_IMAGE_NAME')
+        string(name: 'REGISTRY_URL')
+        string(name: 'IMAGE_NAME')
+        string(name: 'BUILD_NUMBER')
     }
+
+//     parameters {
+//         string(name: 'BOT_IMAGE_NAME')
+//     }
 
     stages {
         stage('Bot Deploy') {
@@ -28,8 +34,8 @@ pipeline {
                     #sed -i "s%IMAGE_NAME%${BOT_IMAGE_NAME}%g" infra/k8s/bot.yaml
                     # apply the configurations to k8s cluster
                     kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
-                    kubectl set image deployment/bot-deployment bot=${BOT_IMAGE_NAME} -n ${APP_ENV}
-                    kubectl rollout status deployment/bot-deployment -n ${APP_ENV}
+                    kubectl set image deployment/bot-deployment bot=\${REGISTRY_URL}/\${IMAGE_NAME}:\${BUILD_NUMBER} -n \${APP_ENV}
+                    kubectl rollout status deployment/bot-deployment -n \${APP_ENV}
                     kubectl get deployments bot-deployment -n ${APP_ENV}
                     # kubectl set image deployment/bot-deployment bot=$IMAGE_NAME --kubeconfig ${KUBECONFIG} -n dev
                     aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.eu-north-1.amazonaws.com
