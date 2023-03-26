@@ -25,8 +25,8 @@ pipeline {
                 ]) {
                     sh '''
                     # apply the configurations to k8s cluster
-                    sed -i "s|WORKER_IMAGE|$WORKER_IMAGE_NAME|g" infra/k8s/worker.yaml
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/worker.yaml --namespace prod
+                    sed -i "s|WORKER_IMAGE|$WORKER_IMAGE_NAME|g" infra/k8s/worker-prod.yaml
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/worker-prod.yaml --namespace prod
                     aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.eu-north-1.amazonaws.com
 
                     '''
