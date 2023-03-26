@@ -11,7 +11,26 @@ pipeline {
         APP_ENV = "prod"
     }
 
-    // TODO prod worker deploy pipeline
+    parameters {
+        string(name: 'WORKER_IMAGE_NAME')
+    }
 
+    stages {
+        stage('Worker Deploy') {
+            steps {
+                echo "${WORKER_IMAGE_NAME}"
+                withCredentials([
+                    file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
+                ]) {
+                    sh '''
+                    # apply the configurations to k8s cluster
+                    sed -i "s|WORKER_IMAGE|$WORKER_IMAGE_NAME|g" infra/k8s/worker.yaml
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/worker.yaml --namespace prod
+                    aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.eu-north-1.amazonaws.com
 
+                    '''
+                }
+            }
+        }
+    }
 }

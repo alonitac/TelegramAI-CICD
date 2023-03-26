@@ -18,7 +18,7 @@ spec:
           ports:
           env:
             - name: ENV
-              value: dev
+              value:
           resources:
             requests:
               memory: "250Mi"
