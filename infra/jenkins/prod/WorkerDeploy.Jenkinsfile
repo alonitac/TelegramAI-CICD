@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage('Worker Deploy') {
             steps {
-                echo "$(APP_ENV)"
+                echo "${APP_ENV}"
                 echo "${WORKER_IMAGE_NAME}"
                 withCredentials([
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
