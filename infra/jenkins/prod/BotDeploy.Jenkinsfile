@@ -14,6 +14,7 @@ pipeline {
 
 
 
+
     parameters {
         string(name: 'BOT_IMAGE_NAME')
     }
