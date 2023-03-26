@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             // TODO build & push your Jenkins agent image, place the URL here
-            image '<jenkins-agent-image>'
+            image '700935310038.dkr.ecr.us-west-2.amazonaws.com/matan-jenkinsagent-cicd:1'
             args  '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -23,7 +23,7 @@ pipeline {
                 ]) {
                     sh '''
                     # apply the configurations to k8s cluster
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f <path-to-bot-yaml-k8s-manifest>
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f /infra/k8s/bot.yaml
                     '''
                 }
             }
