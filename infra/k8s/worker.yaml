@@ -17,7 +17,7 @@ spec:
           image: WORKER_IMAGE
           ports:
           env:
-            - name: APP_ENV
+            - name: ENV
               value: dev
           resources:
             requests:
