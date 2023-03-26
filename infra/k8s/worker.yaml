@@ -18,7 +18,7 @@ spec:
           ports:
           env:
             - name: ENV
-              value: APP_ENV
+              value:
           resources:
             requests:
               memory: "250Mi"
