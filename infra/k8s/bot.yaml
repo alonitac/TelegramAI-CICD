@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: bot-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: bot
@@ -16,7 +16,6 @@ spec:
         - name: bot
           image: BOT_IMAGE
           ports:
-
           env:
             - name: APP_ENV
               value: dev

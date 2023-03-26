@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: worker-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: worker
@@ -16,7 +16,6 @@ spec:
         - name: worker
           image: WORKER_IMAGE
           ports:
-
           env:
             - name: APP_ENV
               value: dev
