@@ -21,6 +21,7 @@ pipeline {
     stages {
         stage('Bot Deploy') {
             steps {
+                echo "$(APP_ENV)"
                 echo "${BOT_IMAGE_NAME}"
                 withCredentials([
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
