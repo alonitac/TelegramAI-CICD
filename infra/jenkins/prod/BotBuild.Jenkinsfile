@@ -16,7 +16,7 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = 'url-worker-prod'
+        IMAGE_NAME = 'url-bot-prod'
         IMAGE_TAG = '${BUILD_NUMBER}'
         BOT_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
     }
