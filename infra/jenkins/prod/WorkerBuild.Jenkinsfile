@@ -17,7 +17,9 @@ pipeline {
         IMAGE_TAG = '${BUILD_NUMBER}'
         WORKER_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
     }
-
+    parameters {
+        string(name: 'WORKER_IMAGE_NAME', defaultValue: "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}", description: 'The URL of the worker image to use')
+    }
 
 
 
