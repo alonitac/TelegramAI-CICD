@@ -15,11 +15,9 @@ pipeline {
         REGISTRY_URL = '700935310038.dkr.ecr.eu-north-1.amazonaws.com'
         IMAGE_NAME = 'url-bot-prod'
         IMAGE_TAG = '${BUILD_NUMBER}'
-
-    }
-    environment {
         BOT_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
     }
+
 
     stages {
         stage('Build') {

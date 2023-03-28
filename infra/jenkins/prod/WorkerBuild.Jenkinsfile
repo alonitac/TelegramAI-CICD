@@ -15,11 +15,9 @@ pipeline {
         REGISTRY_URL = '700935310038.dkr.ecr.eu-north-1.amazonaws.com'
         IMAGE_NAME = 'url-worker-prod'
         IMAGE_TAG = '${BUILD_NUMBER}'
-
-    }
-    environment {
         WORKER_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
     }
+
 
 
 
