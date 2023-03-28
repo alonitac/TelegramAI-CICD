@@ -41,14 +41,6 @@ pipeline {
                }
             }
         }
-        stage('Store Parameter') {
-            steps {
-                script {
-                    env.WORKER_IMAGE_NAME = string(name: 'WORKER_IMAGE_NAME', value: "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}")
-                }
-                echo "${WORKER_IMAGE_NAME}"
-            }
-        }
     }
     environment {
         WORKER_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
