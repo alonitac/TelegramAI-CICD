@@ -40,7 +40,7 @@ pipeline {
         stage('Store Parameter') {
             steps {
                 script {
-                    env.BOT_IMAGE_NAME = string(name: 'BOT_IMAGE_NAME', value: "${env.REGISTRY_URL}/${env.IMAGE_NAME}:${env.BUILD_NUMBER}")
+                    env.BOT_IMAGE_NAME = string(name: 'BOT_IMAGE_NAME', value: "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}")
                 }
             }
         }
