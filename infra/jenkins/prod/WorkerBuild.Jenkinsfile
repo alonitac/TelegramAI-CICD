@@ -17,7 +17,9 @@ pipeline {
         IMAGE_TAG = '${BUILD_NUMBER}'
 
     }
-
+    environment {
+        WORKER_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
+    }
 
 
 
@@ -41,8 +43,5 @@ pipeline {
                }
             }
         }
-    }
-    environment {
-        WORKER_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
     }
 }

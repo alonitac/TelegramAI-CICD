@@ -17,6 +17,9 @@ pipeline {
         IMAGE_TAG = '${BUILD_NUMBER}'
 
     }
+    environment {
+        BOT_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
+    }
 
     stages {
         stage('Build') {
@@ -36,9 +39,6 @@ pipeline {
                    sh 'docker image prune -a --filter "until=240h" --force'
                }
             }
-        }
-        environment {
-            BOT_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
         }
     }
 }
