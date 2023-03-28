@@ -37,8 +37,8 @@ pipeline {
                }
             }
         }
-    }
-    environment {
-        BOT_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
+        environment {
+            BOT_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
+        }
     }
 }
