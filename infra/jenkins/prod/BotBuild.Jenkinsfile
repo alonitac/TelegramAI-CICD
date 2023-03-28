@@ -37,13 +37,11 @@ pipeline {
                }
             }
         }
+        stage('Store Parameter') {
+         steps {
+             script {
+            env.WORKER_IMAGE_NAME = string(name: 'BOT_IMAGE_NAME', value: "${env.REGISTRY_URL}/${env.IMAGE_NAME}:${env.BUILD_NUMBER}")
+        }
 
-//         stage('Trigger Deploy') {
-//             steps {
-//                 build job: 'BotDeploy', wait: false, parameters: [
-//                     string(name: 'BOT_IMAGE_NAME', value: "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}")
-//                 ]
-//             }
-//         }
     }
 }

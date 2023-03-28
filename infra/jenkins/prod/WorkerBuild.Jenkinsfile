@@ -41,6 +41,14 @@ pipeline {
                }
             }
         }
+        stage('Store Parameter') {
+             steps {
+                 script {
+                env.WORKER_IMAGE_NAME = string(name: 'WORKER_IMAGE_NAME', value: "${env.REGISTRY_URL}/${env.IMAGE_NAME}:${env.BUILD_NUMBER}")
+            }
+        }
+
+    // Your other pipeline stages
 
 //         stage('Trigger Deploy') {
 //             steps {
