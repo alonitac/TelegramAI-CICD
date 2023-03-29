@@ -16,5 +16,5 @@ spec:
         env: env_to_replace
     spec:
       containers:
-      - name: botApp
+      - name: bot-app
         image: dynamic_image
