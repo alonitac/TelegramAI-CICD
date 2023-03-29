@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: bot-deployment
   labels:
-    app: botApp
+    app: bot-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: botApp
+      app: bot-app
   template:
     metadata:
       labels:
-        app: botApp
+        app: bot-app
         env: env_to_replace
     spec:
       containers:
