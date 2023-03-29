@@ -29,7 +29,7 @@ pipeline {
                 ]) {
                     sh '''
                     # apply the configurations to k8s cluster
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot_deploy.yaml
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot_deploy.yaml -n dev
                     '''
                 }
             }
