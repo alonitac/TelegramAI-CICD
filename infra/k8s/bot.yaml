@@ -1,19 +1,19 @@
-# TODO implement the kubernetes manifest here
-apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: BotApp
+  name: bot-deployment
+  labels:
+    app: botApp
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: BotApp
-      replicas: 1
+      app: botApp
   template:
     metadata:
       labels:
-        app: BotApp
+        app: botApp
         env: env_to_replace
     spec:
       containers:
-      - name: BotApp
+      - name: botApp
         image: dynamic_image

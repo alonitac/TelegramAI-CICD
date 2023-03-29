@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage('yaml preparation'){
             steps{
-                sh "sed 's|dynamic_image|$BOT_IMAGE_NAME|g; s|env_to_replace|$APP_ENV|g' infra/k8s/bot.yaml"
+                sh "sed 's|dynamic_image|$BOT_IMAGE_NAME|g; s|env_to_replace|$APP_ENV|g' infra/k8s/bot.yaml > infra/k8s/bot_deploy.yaml"
             }
         }
 
