@@ -18,8 +18,8 @@ pipeline {
     stages {
         stage('yaml preparation'){
             steps{
-                sh "sed 's|dynamic_image|$BOT_IMAGE_NAME|g' infra/k8s/bot.yaml "
-                sh "sed 's|env_to_replace|$APP_ENV|g' infra/k8s/bot.yaml "
+                sh "sed 's|dynamic_image|$BOT_IMAGE_NAME|g' infra/k8s/bot.yaml > infra/k8s/bot1.yaml "
+                sh "sed 's|env_to_replace|$APP_ENV|g' infra/k8s/bot1.yaml > bot_deploy.yaml"
             }
         }
 
@@ -30,7 +30,7 @@ pipeline {
                 ]) {
                     sh '''
                     # apply the configurations to k8s cluster
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot_deploy.yaml
                     '''
                 }
             }
