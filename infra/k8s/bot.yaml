@@ -17,4 +17,4 @@ spec:
       - name: BotApp
         image: 700935310038.dkr.ecr.us-west-2.amazonaws.com/matan-dev-bot:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
