@@ -29,7 +29,6 @@ pipeline {
                 ]) {
                     sh '''
                     # apply the configurations to k8s cluster
-                    aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $REGISTRY_URL
                     kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot_deploy.yaml -n dev
                     '''
                 }
