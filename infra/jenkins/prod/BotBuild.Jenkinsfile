@@ -42,6 +42,15 @@ pipeline {
                }
             }
         }
+        stage('Set BOT_IMAGE_NAME') {
+            steps {
+                script {
+                    // set BOT_IMAGE_NAME as output variable
+                    env.BOT_IMAGE_NAME = "${env.BOT_IMAGE_NAME}"
+                    echo "BOT_IMAGE_NAME=${env.BOT_IMAGE_NAME}"
+                }
+            }
+        }
     }
 }
 
