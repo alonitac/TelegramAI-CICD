@@ -43,9 +43,16 @@ pipeline {
                }
             }
         }
+        stage('Set WORKER_IMAGE_NAME') {
+            steps {
+                script {
+                    // set WORKER_IMAGE_NAME as output variable
+                    env.WORKER_IMAGE_NAME = "$REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER"
+                    echo "WORKER_IMAGE_NAME=${env.WORKER_IMAGE_NAME}"
+                }
+            }
+        }
     }
-//     parameters {
-//         string(name: 'WORKER_IMAGE_NAME', defaultValue: "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}", description: 'The URL of the worker image to use')
-//     }
+
 }
 

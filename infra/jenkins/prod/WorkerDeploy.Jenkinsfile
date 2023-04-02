@@ -7,6 +7,7 @@ pipeline {
         }
     }
 
+
     environment {
         APP_ENV = "prod"
     }
