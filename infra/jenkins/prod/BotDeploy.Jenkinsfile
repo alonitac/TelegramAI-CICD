@@ -15,7 +15,7 @@ pipeline {
 
 
     parameters {
-        string(name: 'BOT_IMAGE_NAME', value: "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}")
+        string(name: 'BOT_IMAGE_NAME')
     }
 
     stages {
