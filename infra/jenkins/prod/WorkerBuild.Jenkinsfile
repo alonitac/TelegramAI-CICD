@@ -7,21 +7,22 @@ pipeline {
         }
     }
 
-    parameters {
-        string(name: 'WORKER_IMAGE_NAME', defaultValue: "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}", description: 'The URL of the worker image to use')
-    }
 
     options {
         timestamps()
     }
 
     environment {
+        REGISTRY_URL = '700935310038.dkr.ecr.eu-north-1.amazonaws.com'
         IMAGE_NAME = 'url-worker-prod'
         IMAGE_TAG = '${BUILD_NUMBER}'
-        WORKER_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
+
     }
 
-    def REGISTRY_URL = '700935310038.dkr.ecr.eu-north-1.amazonaws.com'
+
+
+
+
 
     stages {
         stage('Build') {
@@ -43,4 +44,8 @@ pipeline {
             }
         }
     }
+//     parameters {
+//         string(name: 'WORKER_IMAGE_NAME', defaultValue: "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}", description: 'The URL of the worker image to use')
+//     }
 }
+

@@ -7,21 +7,22 @@ pipeline {
         }
     }
 
-    parameters {
-        string(name: 'BOT_IMAGE_NAME', defaultValue: "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}", description: 'The URL of the bot image to use')
-    }
 
     options {
         timestamps()
     }
 
     environment {
+        REGISTRY_URL = '700935310038.dkr.ecr.eu-north-1.amazonaws.com'
         IMAGE_NAME = 'url-bot-prod'
         IMAGE_TAG = '${BUILD_NUMBER}'
-        BOT_IMAGE_NAME = "${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}"
+        BOT_IMAGE_NAME = '${REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}'
     }
 
-    def REGISTRY_URL = '700935310038.dkr.ecr.eu-north-1.amazonaws.com'
+
+
+
+
 
     stages {
         stage('Build') {
@@ -29,7 +30,7 @@ pipeline {
                 // TODO dev bot build stage
                 sh '''
                 aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin $REGISTRY_URL
-                docker build -t $IMAGE_NAME:$BUILD_NUMBER -f worker/Dockerfile .
+                docker build -t $IMAGE_NAME:$BUILD_NUMBER -f bot/Dockerfile .
                 docker tag $IMAGE_NAME:$BUILD_NUMBER $REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER
                 docker push $REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER
 
