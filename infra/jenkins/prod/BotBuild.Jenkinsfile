@@ -46,7 +46,7 @@ pipeline {
             steps {
                 script {
                     // set BOT_IMAGE_NAME as output variable
-                    env.BOT_IMAGE_NAME = "${env.BOT_IMAGE_NAME}"
+                    env.BOT_IMAGE_NAME = "$REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER"
                     echo "BOT_IMAGE_NAME=${env.BOT_IMAGE_NAME}"
                 }
             }
