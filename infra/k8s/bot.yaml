@@ -5,7 +5,7 @@ metadata:
   labels:
     app: bot-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: bot-app
