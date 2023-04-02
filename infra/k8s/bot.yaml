@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: bot-deployment
   labels:
-    app: bot-app
+   app: bot-app
 spec:
   replicas: 2
   selector:
