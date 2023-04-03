@@ -106,58 +106,50 @@
 #     my_bot = YoutubeBot(telegram_token)
 #     my_bot.start()
 import os
-import telebot
-from botocore.exceptions import ClientError
-from loguru import logger
-import boto3
 import json
+import boto3
+from botocore.exceptions import ClientError
 
+from telegram.ext import Updater, MessageHandler, Filters
+from telegram import ParseMode
+
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 class Bot:
+    """Telegram Bot base class"""
 
     def __init__(self, token):
-        self.bot = telebot.TeleBot(token, threaded=False)
-        self.bot.set_update_listener(self._bot_internal_handler)
-
+        self.updater = Updater(token=token, use_context=True)
+        self.dispatcher = self.updater.dispatcher
         self.current_msg = None
 
-    def _bot_internal_handler(self, messages):
-        """Bot internal messages handler"""
-        for message in messages:
-            self.current_msg = message
-            self.handle_message(message)
+        # Add greeting message
+        self.dispatcher.add_handler(MessageHandler(Filters.command('start'), self.send_greeting))
 
-    def start(self):
-        """Start polling msgs from users, this function never returns"""
-        logger.info('Telegram Bot information')
-        logger.info(self.bot.get_me())
-        self.bot.send_message(self.current_msg.chat.id, 'Welcome to url chat bot', parse_mode='HTML',
-                              reply_markup=telebot.types.InlineKeyboardMarkup(
-                                  [[telebot.types.InlineKeyboardButton(text='🔗 YouTube', url='https://www.youtube.com/'),
-                                    telebot.types.InlineKeyboardButton(text='🔗 Telegram', url='https://telegram.org/')]]))
+    def send_text(self, text, reply_to=None):
+        self.updater.bot.send_message(
+            chat_id=self.current_msg.chat_id,
+            text=text,
+            reply_to_message_id=reply_to
+        )
 
-        self.bot.infinity_polling()
+    def send_text_with_quote(self, text, message_id, reply_to=None):
+        self.updater.bot.send_message(
+            chat_id=self.current_msg.chat_id,
+            text=f'"{text}"\n\n-- Message ID: {message_id}',
+            reply_to_message_id=reply_to,
+            parse_mode=ParseMode.MARKDOWN
+        )
 
-    def send_text(self, text):
-        self.bot.send_message(self.current_msg.chat.id, text)
-
-    def send_text_with_quote(self, text, message_id):
-        self.bot.send_message(self.current_msg.chat.id, text, reply_to_message_id=message_id)
-
-    def is_current_msg_photo(self):
-        return self.current_msg.content_type == 'photo'
-
-    def download_user_photo(self, quality=0):
-        """
-        Downloads photos sent to the Bot to `photos` directory (should be existed)
-        :param quality: integer representing the file quality. Allowed values are [0, 1, 2]
-        :return:
-        """
+    def download_user_photo(self, quality=1):
         if self.current_msg.content_type != 'photo':
             raise RuntimeError(f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
 
-        file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
-        data = self.bot.download_file(file_info.file_path)
+        file_info = self.updater.bot.get_file(self.current_msg.photo[quality].file_id)
+        data = self.updater.bot.download_file(file_info.file_path)
 
         with open(file_info.file_path, 'wb') as f:
             f.write(data)
@@ -167,6 +159,13 @@ class Bot:
         logger.info(f'Incoming message: {message}')
         self.send_text(f'Your original message: {message.text}')
 
+    def start(self):
+        self.dispatcher.add_handler(MessageHandler(Filters.text, self.handle_message))
+        self.updater.start_polling()
+
+    # Add greeting message
+    def send_greeting(self, update, context):
+        context.bot.send_message(chat_id=update.effective_chat.id, text="Welcome to url chat bot!")
 
 class QuoteBot(Bot):
     def handle_message(self, message):
