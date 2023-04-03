@@ -112,6 +112,7 @@ from loguru import logger
 import boto3
 import json
 
+
 class Bot:
 
     def __init__(self, token):
@@ -131,7 +132,8 @@ class Bot:
         logger.info(f'{self.__class__.__name__} is up and listening to new messages....')
         logger.info('Telegram Bot information')
         logger.info(self.bot.get_me())
-        self.bot.send_message(self.current_msg.chat.id, "Welcome to url chat bot :) ")
+
+        self.bot.send_message(self.current_msg.chat.id, "Welcome to url chat bot :) ") # Greeting message
         self.bot.infinity_polling()
 
     def send_text(self, text):
@@ -163,10 +165,12 @@ class Bot:
         logger.info(f'Incoming message: {message}')
         self.send_text(f'Your original message: {message.text}')
 
+
 class QuoteBot(Bot):
     def handle_message(self, message):
         if message.text != 'Don\'t quote me please':
             self.send_text_with_quote(message.text, message_id=message.message_id)
+
 
 class YoutubeBot(Bot):
     def handle_message(self, message):
@@ -186,12 +190,14 @@ class YoutubeBot(Bot):
                 logger.error(error)
                 self.send_text('Something went wrong, please try again...')
 
+
 def get_telegram_token_secret():
     secrets_manager = boto3.client('secretsmanager', region_name=config.get('aws_region'))
     secret_value = secrets_manager.get_secret_value(
         SecretId=config.get('telegram_token_secret_name')
     )
     return json.loads(secret_value['SecretString'])['telegramToken']
+
 
 if __name__ == '__main__':
     env = os.environ['ENV']
