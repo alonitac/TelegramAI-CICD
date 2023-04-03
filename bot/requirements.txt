@@ -1,4 +1,5 @@
-pyTelegramBotAPI
+pyTelegramBotAPI==4.10.0
 yt-dlp>=2023.2.17
 loguru
 boto3
+
