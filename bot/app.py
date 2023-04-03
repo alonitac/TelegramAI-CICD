@@ -106,50 +106,54 @@
 #     my_bot = YoutubeBot(telegram_token)
 #     my_bot.start()
 import os
-import json
-import boto3
+import telebot
 from botocore.exceptions import ClientError
-
-from telegram.ext import Updater, MessageHandler, Filters
-from telegram import ParseMode
-
-import logging
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+from loguru import logger
+import boto3
+import json
 
 class Bot:
-    """Telegram Bot base class"""
 
     def __init__(self, token):
-        self.updater = Updater(token=token, use_context=True)
-        self.dispatcher = self.updater.dispatcher
+        self.bot = telebot.TeleBot(token, threaded=False)
+        self.bot.set_update_listener(self._bot_internal_handler)
+
         self.current_msg = None
 
-        # Add greeting message
-        self.dispatcher.add_handler(MessageHandler(Filters.command('start'), self.send_greeting))
+    def _bot_internal_handler(self, messages):
+        """Bot internal messages handler"""
+        for message in messages:
+            self.current_msg = message
+            self.handle_message(message)
 
-    def send_text(self, text, reply_to=None):
-        self.updater.bot.send_message(
-            chat_id=self.current_msg.chat_id,
-            text=text,
-            reply_to_message_id=reply_to
-        )
+    def start(self):
+        """Start polling msgs from users, this function never returns"""
+        logger.info(f'{self.__class__.__name__} is up and listening to new messages....')
+        logger.info('Telegram Bot information')
+        logger.info(self.bot.get_me())
+        self.bot.send_message(self.current_msg.chat.id, "Welcome to url chat bot :) ")
+        self.bot.infinity_polling()
 
-    def send_text_with_quote(self, text, message_id, reply_to=None):
-        self.updater.bot.send_message(
-            chat_id=self.current_msg.chat_id,
-            text=f'"{text}"\n\n-- Message ID: {message_id}',
-            reply_to_message_id=reply_to,
-            parse_mode=ParseMode.MARKDOWN
-        )
+    def send_text(self, text):
+        self.bot.send_message(self.current_msg.chat.id, text)
 
-    def download_user_photo(self, quality=1):
+    def send_text_with_quote(self, text, message_id):
+        self.bot.send_message(self.current_msg.chat.id, text, reply_to_message_id=message_id)
+
+    def is_current_msg_photo(self):
+        return self.current_msg.content_type == 'photo'
+
+    def download_user_photo(self, quality=0):
+        """
+        Downloads photos sent to the Bot to `photos` directory (should be existed)
+        :param quality: integer representing the file quality. Allowed values are [0, 1, 2]
+        :return:
+        """
         if self.current_msg.content_type != 'photo':
             raise RuntimeError(f'Message content of type \'photo\' expected, but got {self.current_msg["content_type"]}')
 
-        file_info = self.updater.bot.get_file(self.current_msg.photo[quality].file_id)
-        data = self.updater.bot.download_file(file_info.file_path)
+        file_info = self.bot.get_file(self.current_msg.photo[quality].file_id)
+        data = self.bot.download_file(file_info.file_path)
 
         with open(file_info.file_path, 'wb') as f:
             f.write(data)
@@ -159,19 +163,10 @@ class Bot:
         logger.info(f'Incoming message: {message}')
         self.send_text(f'Your original message: {message.text}')
 
-    def start(self):
-        self.dispatcher.add_handler(MessageHandler(Filters.text, self.handle_message))
-        self.updater.start_polling()
-
-    # Add greeting message
-    def send_greeting(self, update, context):
-        context.bot.send_message(chat_id=update.effective_chat.id, text="Welcome to url chat bot!")
-
 class QuoteBot(Bot):
     def handle_message(self, message):
         if message.text != 'Don\'t quote me please':
             self.send_text_with_quote(message.text, message_id=message.message_id)
-
 
 class YoutubeBot(Bot):
     def handle_message(self, message):
@@ -191,14 +186,12 @@ class YoutubeBot(Bot):
                 logger.error(error)
                 self.send_text('Something went wrong, please try again...')
 
-
 def get_telegram_token_secret():
     secrets_manager = boto3.client('secretsmanager', region_name=config.get('aws_region'))
     secret_value = secrets_manager.get_secret_value(
         SecretId=config.get('telegram_token_secret_name')
     )
     return json.loads(secret_value['SecretString'])['telegramToken']
-
 
 if __name__ == '__main__':
     env = os.environ['ENV']
