@@ -54,7 +54,7 @@ def main():
 
 
 def lambda_handler(event, context):
-    logger.info(f'New event {event}')
+    logger.info(f'New Event {event}')
 
     for record in event['Records']:
         process_msg(str(record["body"]))
