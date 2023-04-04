@@ -6,6 +6,40 @@ pipeline {
             args  '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
+    environment {
+    REGISTRY_URL = '700935310038.dkr.ecr.us-west-2.amazonaws.com'
+    IMAGE_NAME = 'matan-dev-worker'
+    IMAGE_TAG = '${BUILD_NUMBER}'
 
-    // TODO dev worker build stages here
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                // TODO dev worker build stage
+                sh '''
+                aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $REGISTRY_URL
+                docker build -t $IMAGE_NAME:$BUILD_NUMBER -f worker/Dockerfile .
+                docker tag $IMAGE_NAME:$BUILD_NUMBER $REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER
+                docker push $REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER
+                '''
+            }
+            post {
+                always{
+                    sh 'docker image prune -a --filter "until=240" --force'
+                }
+            }
+        }
+
+        stage('Trigger Deploy') {
+            steps {
+                build job: 'BotDeploy', wait: false, parameters: [
+                    string(name: 'BOT_IMAGE_NAME', value: "$REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER")
+                ]
+            }
+        }
+    }
+}
+
+
 }
