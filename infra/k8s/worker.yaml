@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bot-deployment
+  name: worker-deployment
   labels:
-    app: bot-app
+    app: worker-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bot-app
+      app: worker-app
   template:
     metadata:
       labels:
-        app: bot-app
+        app: worker-app
         env: env_to_replace
     spec:
       containers:
-      - name: bot-app
-        image: dynamic_image
+      - name: worker-app
+        image: dynamic_worker_image
         env:
           - name: ENV
             value: env_to_replace
