@@ -22,7 +22,7 @@ pipeline {
             }
         }
 
-        stage('Bot Deploy') {
+        stage('BotDeploy') {
             steps {
                 withCredentials([
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
