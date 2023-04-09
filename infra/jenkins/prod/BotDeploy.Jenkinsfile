@@ -8,11 +8,11 @@ pipeline {
     }
 
     environment {
-        APP_ENV = "main"
+        APP_ENV = "prod"
     }
 
     parameters {
-        string(name: 'PROD_BOT_IMAGE_NAME')
+        string(name:'PROD_BOT_IMAGE_NAME')
     }
 
     stages {
