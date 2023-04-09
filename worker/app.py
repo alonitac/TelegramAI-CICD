@@ -46,7 +46,7 @@ def main():
                     'ReceiptHandle': msg.receipt_handle
                 }])
                 if 'Successful' in response:
-                    logger.info(f'msg {msg} has been handled successfully')
+                    logger.info(f'msg {msg} has been handled successfully..')
 
         except ClientError as err:
             logger.exception(f"Couldn't receive messages {err}")
