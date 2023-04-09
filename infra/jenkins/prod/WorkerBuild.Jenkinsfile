@@ -31,7 +31,7 @@ pipeline {
         stage('Trigger Deploy') {
             steps {
                 build job: 'workerDeploy', wait: false, parameters: [
-                    string(name: 'PROD_BOT_IMAGE_NAME', value: "$REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER")
+                    string(name: 'WORKER_IMAGE_NAME', value: "$REGISTRY_URL/$IMAGE_NAME:$BUILD_NUMBER")
                 ]
             }
         }
