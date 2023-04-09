@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage('yaml preparation'){
             steps{
-                sh "sed 's|dynamic_worker_image|$WORKER_IMAGE_NAME|g; s|env_to_replace|$APP_ENV|g' infra/k8s/worker.yaml > infra/k8s/worker_deploy.yaml"
+                sh "sed 's|dynamic_worker_image|$WORKER_IMAGE_NAME|g; s|env_to_replace|$APP_ENV|g' infra/k8s/prodworker.yaml > infra/k8s/prodworker_deploy.yaml"
             }
         }
 
@@ -29,7 +29,7 @@ pipeline {
                 ]) {
                     sh '''
                     # apply the configurations to k8s cluster
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/worker_deploy.yaml -n prod
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/prodworker_deploy.yaml -n prod
                     '''
                 }
             }
