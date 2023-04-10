@@ -1,6 +1,6 @@
 {
   "aws_region": "us-west-2",
   "bot_to_worker_queue_name": "matan-sqs-dev",
-  "telegram_token_secret_name": "matanTG-secret",
+  "telegram_token_secret_name": "matan_k0s_dev",
   "videos_bucket": "matan-telegramai-bucket"
 }
