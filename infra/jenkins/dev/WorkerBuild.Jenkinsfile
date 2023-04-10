@@ -8,7 +8,7 @@ pipeline {
     }
     environment {
     REGISTRY_URL = '700935310038.dkr.ecr.eu-north-1.amazonaws.com'
-    IMAGE_NAME = 'aleksei-dev-worker'
+    IMAGE_NAME = 'aleksei-worker-dev'
     IMAGE_TAG = '${BUILD_NUMBER}'
 
     }
