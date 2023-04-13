@@ -10,7 +10,6 @@ pipeline {
     REGISTRY_URL = '700935310038.dkr.ecr.us-west-2.amazonaws.com'
     IMAGE_NAME = 'matan-dev-worker'
     IMAGE_TAG = '${BUILD_NUMBER}'
-
     }
 
     stages {
@@ -29,7 +28,7 @@ pipeline {
                     sh 'docker image prune -a --filter "until=240" --force'
                 }
             }
-
+        }
         stage('Trigger Deploy') {
             steps {
                 build job: 'workerDeploy', wait: false, parameters: [
