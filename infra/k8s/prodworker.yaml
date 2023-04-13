@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workerdeployment
+  labels:
+    app: worker-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker-app
+  template:
+    metadata:
+      labels:
+        app: worker-app
+        env: env_to_replace
+    spec:
+      containers:
+      - name: worker-app
+        image: dynamic_worker_image
+        env:
+          - name: ENV
+            value: env_to_replace

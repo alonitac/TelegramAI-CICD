@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bot-deployment
+  labels:
+    app: bot-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bot-app
+  template:
+    metadata:
+      labels:
+        app: bot-app
+        env: env_to_replace
+    spec:
+      containers:
+      - name: bot-app
+        image: dynamic_image
+        env:
+          - name: ENV
+            value: env_to_replace
