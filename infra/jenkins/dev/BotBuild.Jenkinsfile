@@ -29,6 +29,7 @@ pipeline {
                     sh 'docker image prune -a --filter "until=64" --force'
                 }
             }
+        }
 
 
         stage('Trigger Deploy') {
