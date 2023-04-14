@@ -34,7 +34,7 @@ class Bot:
     def send_text(self, text):
         self.bot.send_message(self.current_msg.chat.id, text)
 
-
+    #rest of the code
 
 
     def send_text_with_quote(self, text, message_id):
