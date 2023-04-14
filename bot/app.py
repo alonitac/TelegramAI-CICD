@@ -26,10 +26,16 @@ class Bot:
         logger.info('Telegram Bot information')
         logger.info(self.bot.get_me())
 
+        # Add a greeting message
+        self.bot.send_message(chat_id, "Welcome to URL Chat Bot!")
+
         self.bot.infinity_polling()
 
     def send_text(self, text):
         self.bot.send_message(self.current_msg.chat.id, text)
+
+
+
 
     def send_text_with_quote(self, text, message_id):
         self.bot.send_message(self.current_msg.chat.id, text, reply_to_message_id=message_id)
