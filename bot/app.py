@@ -71,7 +71,7 @@ class YoutubeBot(Bot):
             self.download_user_photo(quality=2)
         else:
             if self.current_msg.text == '/start':
-                self.send_text('Welcome to URL Chat Bot!')
+                self.send_text('Welcome to url Chat Bot!')
             try:
                 response = workers_queue.send_message(
                     MessageBody=message.text,
@@ -80,7 +80,7 @@ class YoutubeBot(Bot):
                     }
                 )
                 logger.info(f'msg {response.get("MessageId")} has been sent to queue')
-                self.send_text('Your message is being processed...')
+                self.send_text('Your message is being processed...check your s3 bucket')
             except ClientError as error:
                 logger.error(error)
                 self.send_text('Something went wrong, please try again...')
