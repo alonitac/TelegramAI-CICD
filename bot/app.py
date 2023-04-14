@@ -70,6 +70,8 @@ class YoutubeBot(Bot):
         if self.current_msg.content_type == 'photo':
             self.download_user_photo(quality=2)
         else:
+            if self.current_msg.text == '/start':
+                self.send_text('Welcome to URL Chat Bot!')
             try:
                 response = workers_queue.send_message(
                     MessageBody=message.text,
@@ -82,6 +84,7 @@ class YoutubeBot(Bot):
             except ClientError as error:
                 logger.error(error)
                 self.send_text('Something went wrong, please try again...')
+
 
 
 def get_telegram_token_secret():
