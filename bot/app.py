@@ -56,7 +56,7 @@ class Bot:
         """Bot Main message handler"""
         logger.info(f'Incoming message: {message}')
         self.send_text(f'Your original message: {message.text}')
-        self.send_text("Welcome to URL Chat Bot!")
+        self.send_text("Welcome to url Chat Bot!")
 
 
 class QuoteBot(Bot):
