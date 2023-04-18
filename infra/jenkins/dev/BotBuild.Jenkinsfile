@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             // TODO build & push your Jenkins agent image, place the URL here
-            image '<jenkins-agent-image>'
+            image 'public.ecr.aws/n5h8m9x0/tamir-jenkins:test'
             args  '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -10,19 +10,16 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                // TODO dev bot build stage
-                sh '''
-                echo "building..."
-                '''
+                echo "testing building..."
             }
         }
 
-        stage('Trigger Deploy') {
-            steps {
-                build job: 'BotDeploy', wait: false, parameters: [
-                    string(name: 'BOT_IMAGE_NAME', value: "<image-name>")
-                ]
-            }
-        }
+        // stage('Trigger Deploy') {
+        //     steps {
+        //         build job: 'BotDeploy', wait: false, parameters: [
+        //             string(name: 'BOT_IMAGE_NAME', value: "<image-name>")
+        //         ]
+        //     }
+        // }
     }
 }
