@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'echo "testing building..."'
+                sh 'echo "${Message}"'
                 sh 'echo more testing...'
             }
         }
