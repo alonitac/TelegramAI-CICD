@@ -6,9 +6,9 @@ pipeline {
             args  '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
-    parameters {
-        string(name: 'Message', defaultValue:'default params')
-    }
+    // parameters {
+    //     string(name: 'Message', defaultValue:'default params')
+    // }
     stages {
         stage('Build') {
             steps {
