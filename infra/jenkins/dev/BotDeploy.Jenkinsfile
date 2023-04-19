@@ -23,6 +23,7 @@ pipeline {
                 ]) {
                     sh '''
                     # apply the configurations to k8s cluster
+                    ####testingggg
                     kubectl apply --kubeconfig ${KUBECONFIG} -f <path-to-bot-yaml-k8s-manifest>
                     '''
                 }
