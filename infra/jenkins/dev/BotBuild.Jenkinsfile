@@ -13,7 +13,6 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'echo "${Message}"'
-                sh 'echo more testing...'
             }
         }
 
