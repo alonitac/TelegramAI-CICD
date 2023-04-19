@@ -13,8 +13,8 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                echo "ls -l"
-                echo "pwd"
+                ls -l
+                pwd
                 '''
             }
         }
