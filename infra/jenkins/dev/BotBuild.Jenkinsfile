@@ -13,7 +13,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                ls -l infra/
+                ls -l infra/jenkins/dev/
                 pwd
                 '''
             }
