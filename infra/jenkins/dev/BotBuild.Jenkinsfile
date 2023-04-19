@@ -11,6 +11,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'echo "testing building..."'
+                sh 'echo more testing...'
             }
         }
 
