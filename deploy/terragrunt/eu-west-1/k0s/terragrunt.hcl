@@ -10,7 +10,6 @@ inputs = {
   vpc_private_subnets = dependency.vpc.outputs.vpc_private_subnets
   vpc_public_subnets  = dependency.vpc.outputs.vpc_public_subnets
   vpc_id  = dependency.vpc.outputs.vpc_id
-
 }
 
 dependency "vpc" {
