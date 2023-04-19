@@ -7,7 +7,7 @@ pipeline {
         }
     }
     parameters {
-        string(name: 'Message')
+        string(name: 'Message', defaultValue:'default params')
     }
     stages {
         stage('Build') {
