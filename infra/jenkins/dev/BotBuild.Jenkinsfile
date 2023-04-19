@@ -12,7 +12,10 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'echo "${Message}"'
+                sh '''
+                echo "ls -l"
+                echo "pwd"
+                '''
             }
         }
 
