@@ -13,7 +13,10 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                echo "${Message}"
+                whoami
+                cd ~
+                pwd
+                ls
                 '''
             }
         }
