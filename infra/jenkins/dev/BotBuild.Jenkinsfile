@@ -15,7 +15,7 @@ pipeline {
                 sh '''
                 docker build -f bot/Dockerfile -t 700935310038.dkr.ecr.us-east-1.amazonaws.com/tamir/jenkins/bot:latest .
                 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.us-east-1.amazonaws.com
-                aws ecr create-repository --repository-name tamir/jenkins/bot-test
+                aws ecr create-repository --repository-name tamir/jenkins/bot-test --region us-east-1
                 docker push 700935310038.dkr.ecr.us-east-1.amazonaws.com/tamir/jenkins/bot-test:jenkins
                 '''
             }

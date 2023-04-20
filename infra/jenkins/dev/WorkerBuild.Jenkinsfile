@@ -13,7 +13,10 @@ parameters {
         stage('Build') {
             steps {
                 sh '''
-                echo "${Message}"
+                docker build -f worker/Dockerfile -t 700935310038.dkr.ecr.us-east-1.amazonaws.com/tamir/jenkins/worker:latest .
+                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.us-east-1.amazonaws.com
+                aws ecr create-repository --repository-name tamir/jenkins/worker
+                docker push 700935310038.dkr.ecr.us-east-1.amazonaws.com/tamir/jenkins/worker:latest
                 '''
             }
         }
