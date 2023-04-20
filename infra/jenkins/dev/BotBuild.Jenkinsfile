@@ -18,7 +18,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                docker build -f ${DockerFilePath} -t ${ECRRegistry}/${ImageName}:${ImageTag} .
+                docker build -f ${DockerFilePath} -t ${ECRRegistry}/${ECRRepo}/${ImageName}:${ImageTag} .
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
                 
                 aws ecr describe-repositories --repository-names ${ECRRepo}/${ImageName} --region ${Region} 2>&1 > /dev/null
@@ -29,7 +29,7 @@ pipeline {
                     echo "${ECRRepo}/${ImageName} in region ${Region} already exists"
                 fi
                 
-                docker push ${ECRRegistry}/${ImageName}:${ImageTag}
+                docker push ${ECRRegistry}/${ECRRepo}/${ImageName}:${ImageTag}
                 '''
             }
         }
