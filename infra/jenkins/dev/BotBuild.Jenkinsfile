@@ -13,11 +13,8 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                whoami
-                cd ~
                 pwd
                 ls
-                kubectl
                 '''
             }
         }
