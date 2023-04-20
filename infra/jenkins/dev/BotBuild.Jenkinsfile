@@ -16,7 +16,7 @@ pipeline {
             steps {
                 sh '''
                 docker build -f bot/Dockerfile -t ${ECRRegistry}/bot-test:latest .
-                aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
+                aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.eu-west-1.amazonaws.com
                 aws ecr create-repository --repository-name tamir/jenkins/bot-test --region ${Region} || true
                 docker push ${ECRRegistry}/bot-test:jenkins
                 '''
