@@ -9,7 +9,7 @@ pipeline {
     parameters {
         string(name: 'Region', defaultValue:'eu-west-1')
         string(name: 'ECRRegistry', defaultValue:'700935310038.dkr.ecr.eu-west-1.amazonaws.com')
-        string(name: 'ECRRepo'. defaultValue: 'tamir/jenkins')
+        string(name: 'ECRRepo', defaultValue: 'tamir/jenkins')
         string(name: 'ImageName', defaultValue: 'bot')
         string(name: 'ImageTag', defaultValue: 'latest')
         string(name: 'DockerFilePath', defaultValue: 'bot/Dockerfile')
