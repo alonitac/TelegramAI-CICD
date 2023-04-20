@@ -22,7 +22,7 @@ pipeline {
             }
         }
 
-        // stage('Trigger - Deploy') {
+        // stage('Trigger- Deploy') {
         //     steps {
         //         build job: 'BotDeploy', wait: false, parameters: [
         //             string(name: 'BOT_IMAGE_NAME', value: "700935310038.dkr.ecr.us-east-1.amazonaws.com/tamir/jenkins/bot:jenkins")
