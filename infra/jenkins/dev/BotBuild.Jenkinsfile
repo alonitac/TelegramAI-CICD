@@ -9,7 +9,7 @@ pipeline {
     parameters {
         string(name: 'Message', defaultValue:'default testing params !!')
         string(name: 'Region', defaultValue:'eu-west-1')
-        string(name: 'ECRRegistry', defaultValue:'700935310038.dkr.ecr.us-east-1.amazonaws.com/tamir/jenkins')
+        string(name: 'ECRRegistry', defaultValue:'700935310038.dkr.ecr.eu-west-1.amazonaws.com/tamir/jenkins')
     }
     stages {
         stage('Build') {
