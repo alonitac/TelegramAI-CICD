@@ -7,8 +7,8 @@ terraform {
     bucket = "tamir-s3-${local.path[0]}"
     key    = "${path_relative_to_include()}/terraform.tfstate"
     region = "${local.path[0]}"
-    access_key = "AKIA2GMYABLLFS7ESYFF"
-    secret_key = "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"
+    access_key = ""
+    secret_key = ""
   }
 }
 EOF
@@ -21,8 +21,8 @@ remote_state {
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = "${local.path[0]}"
     dynamodb_table = "my-lock-table"
-    access_key = "AKIA2GMYABLLFS7ESYFF"
-    secret_key = "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"
+    access_key = ""
+    secret_key = ""
   }
 }
 
