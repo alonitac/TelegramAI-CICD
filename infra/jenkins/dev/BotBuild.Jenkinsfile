@@ -10,17 +10,22 @@ pipeline {
         string(name: 'Region', defaultValue:'eu-west-1')
         string(name: 'ECRRegistry', defaultValue:'700935310038.dkr.ecr.eu-west-1.amazonaws.com')
         string(name: 'ECRRepo', defaultValue: 'tamir/jenkins')
-        string(name: 'ImageName', defaultValue: 'bot')
         string(name: 'ImageTag', defaultValue: 'latest')
+        string(name: 'ImageName', defaultValue: 'bot')
         string(name: 'DockerFilePath', defaultValue: 'bot/Dockerfile')
     }
     stages {
-        stage('Build') {
+        stage('DockerBuild') {
             steps {
                 sh '''
                 docker build -f ${DockerFilePath} -t ${ECRRegistry}/${ECRRepo}/${ImageName}:${ImageTag} .
+                '''
+            }
+        }
+        stage('DockerPush') {
+            steps {
+                sh '''
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
-                
                 aws ecr describe-repositories --repository-names ${ECRRepo}/${ImageName} --region ${Region} 2>&1 > /dev/null
                 status=$?
                 if [[ ! "${status}" -eq 0 ]]; then
@@ -28,7 +33,6 @@ pipeline {
                 else
                     echo "${ECRRepo}/${ImageName} in region ${Region} already exists"
                 fi
-                
                 docker push ${ECRRegistry}/${ECRRepo}/${ImageName}:${ImageTag}
                 '''
             }
