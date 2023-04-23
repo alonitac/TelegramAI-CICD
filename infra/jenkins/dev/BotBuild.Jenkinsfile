@@ -1,4 +1,5 @@
 def BRANCH_NAME
+def DOCKER_IMG
 
 pipeline {
     agent {
