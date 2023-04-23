@@ -1,3 +1,5 @@
+def BRANCH_NAME
+
 pipeline {
     agent {
         docker {
