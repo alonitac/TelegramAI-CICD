@@ -19,8 +19,9 @@ pipeline {
             steps {
                 sh '''
                 BRANCH_NAME=${GIT_BRANCH##*/}
-                env
-                docker build -f ${DockerFilePath} -t ${ECRRegistry}/${ECRRepo}/${ImageName}:${ImageTag} .
+                DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
+                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
         }
@@ -28,14 +29,14 @@ pipeline {
             steps {
                 sh '''
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
-                aws ecr describe-repositories --repository-names ${ECRRepo}/${ImageName} --region ${Region} 2>&1 > /dev/null
+                aws ecr describe-repositories --repository-names ${DOCKER_IMG} --region ${Region} 2>&1 > /dev/null
                 status=$?
                 if [[ ! "${status}" -eq 0 ]]; then
-                    aws ecr create-repository --repository-name ${ECRRepo}/${ImageName} --region ${Region}
+                    aws ecr create-repository --repository-name ${DOCKER_IMG} --region ${Region}
                 else
-                    echo "${ECRRepo}/${ImageName} in region ${Region} already exists"
+                    echo "${DOCKER_IMG} in region ${Region} already exists"
                 fi
-                docker push ${ECRRegistry}/${ECRRepo}/${ImageName}:${ImageTag}
+                docker push ${FULL_DOCKER_IMG}
                 '''
             }
         }
