@@ -13,7 +13,7 @@ pipeline {
         string(name: 'ImageTag', defaultValue: 'latest')
         string(name: 'ImageName', defaultValue: 'bot')
         string(name: 'DockerFilePath', defaultValue: 'bot/Dockerfile')
-        gitParameter(name: 'BranchName', type: 'BRANCH')
+        gitParameter(name: 'BranchName', type: 'PT_BRANCH')
     }
     stages {
         stage('DockerBuild') {
