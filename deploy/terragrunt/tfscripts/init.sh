@@ -5,8 +5,6 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 RED='\033[0;31m'
 
-sudo su ec2-user
-
 if [ -x /usr/local/bin/k0s ]; then
 	sudo /usr/local/bin/k0s stop &> /dev/null
 	sudo /usr/local/bin/k0s reset &> /dev/null
@@ -17,7 +15,7 @@ else
 fi
 
 
-/usr/local/bin/k0s config create > k0s.yaml && printf "\n${CYAN}Cluster config filed created${NC}"
+sudo /usr/local/bin/k0s config create > k0s.yaml && printf "\n${CYAN}Cluster config filed created${NC}"
 sudo /usr/local/bin/k0s install controller -c k0s.yaml --single && printf "\n\n${CYAN}K0s cluster has been installed${NC}"
 sudo /usr/local/bin/k0s start && printf "\n\n${CYAN}K0s cluster has been started successfully!${NC}"
 
