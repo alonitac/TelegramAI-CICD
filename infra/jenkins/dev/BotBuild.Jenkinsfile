@@ -35,7 +35,7 @@ pipeline {
                 DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
-                aws ecr describe-repositories --repository-names ${DOCKER_IMG} --region ${Region} > /dev/null 2>&1
+                output=$(aws ecr describe-repositories --repository-names ${DOCKER_IMG} 2>&1)
                 status=$?
                 if [[ ! "${status}" -eq 0 ]]; then
                     aws ecr create-repository --repository-name ${DOCKER_IMG} --region ${Region}
@@ -46,6 +46,8 @@ pipeline {
                 '''
             }
         }
+
+        
 
         // stage('Trigger- Deploy') {
         //     steps {
