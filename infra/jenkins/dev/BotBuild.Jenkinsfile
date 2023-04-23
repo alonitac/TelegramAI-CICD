@@ -37,6 +37,7 @@ pipeline {
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
                 aws ecr describe-repositories --repository-names ${DOCKER_IMG} 2>&1 > /dev/null || true
                 status=$?
+                echo ${status}
                 if [[ ! "${status}" -eq 0 ]]; then
                     aws ecr create-repository --repository-name ${DOCKER_IMG} --region ${Region}
                 else
