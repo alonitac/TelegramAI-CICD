@@ -18,7 +18,8 @@ pipeline {
         stage('DockerBuild') {
             steps {
                 sh '''
-                echo '${GIT_BRANCH}'
+                echo '${env.GIT_BRANCH}'
+                echo 'printenv'
                 docker build -f ${DockerFilePath} -t ${ECRRegistry}/${ECRRepo}/${ImageName}:${ImageTag} .
                 '''
             }
