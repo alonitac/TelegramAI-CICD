@@ -18,8 +18,9 @@ pipeline {
         stage('DockerBuild') {
             steps {
                 sh '''
-                BranchName='${GIT_BRANCH##*/}'
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BranchName}/${ImageName}:${ImageTag}
+                BRANCH_NAME=${GIT_BRANCH##*/}
+                DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
