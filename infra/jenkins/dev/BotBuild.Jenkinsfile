@@ -13,14 +13,13 @@ pipeline {
         string(name: 'ImageTag', defaultValue: 'latest')
         string(name: 'ImageName', defaultValue: 'bot')
         string(name: 'DockerFilePath', defaultValue: 'bot/Dockerfile')
+        string(name: 'BranchName', defaultValue: '${GIT_BRANCH##*/}' )
     }
     stages {
         stage('DockerBuild') {
             steps {
                 sh '''
-                BRANCH_NAME=${GIT_BRANCH##*/}
-                DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BranchName}/${ImageName}:${ImageTag}
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
