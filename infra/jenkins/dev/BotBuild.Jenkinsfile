@@ -18,7 +18,6 @@ pipeline {
         stage('DockerBuild') {
             steps {
                 sh '''
-                BRANCH_NAME
                 env
                 docker build -f ${DockerFilePath} -t ${ECRRegistry}/${ECRRepo}/${ImageName}:${ImageTag} .
                 '''
