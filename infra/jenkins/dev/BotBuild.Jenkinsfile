@@ -35,7 +35,7 @@ pipeline {
                 DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
-                aws ecr describe-repositories --repository-names | grep ${DOCKER_IMG}
+                aws ecr describe-repositories | grep ${DOCKER_IMG}
                 status=$?
                 echo ${status}
                 if [[ ! "${status}" -eq 0 ]]; then
