@@ -5,8 +5,8 @@ RUN yum update -y \
   && unzip awscliv2.zip \
   && ./aws/install --bin-dir /aws-cli-bin/
 
-RUN curl -sS -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.4/terragrunt_linux_arm64 -o ./terragrunt \
-  && chmod u+x ./terragrunt \
+RUN curl -sS -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.4/terragrunt_linux_amd64 -o ./terragrunt \
+  && chmod +x ./terragrunt \
   && mv ./terragrunt /usr/local/bin
 
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
@@ -26,5 +26,4 @@ COPY --from=installer /aws-cli-bin/ /usr/local/bin/
 COPY --from=installer /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=installer /usr/bin/terraform /usr/local/bin/terraform
 COPY --from=installer /usr/local/bin/terragrunt /usr/local/bin/
-RUN chmod +x /usr/local/bin/terragrunt
 
