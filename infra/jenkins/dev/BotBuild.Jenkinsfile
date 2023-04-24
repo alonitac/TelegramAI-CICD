@@ -39,6 +39,7 @@ pipeline {
                 DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
                 echo ${AWS_ACCESS_KEY}
+                echo ${AWS_ACCESS_SECRET}
                 cd ./deploy/terragrunt/eu-west-1/vpc/
                 terragrunt init
                 terragrunt plan -lock=false
