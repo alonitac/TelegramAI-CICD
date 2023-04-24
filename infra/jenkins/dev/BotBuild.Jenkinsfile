@@ -31,6 +31,7 @@ pipeline {
         stage('DockerPush') {
             steps {
                 sh '''
+                set -x
                 BRANCH_NAME=${GIT_BRANCH##*/}
                 DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
