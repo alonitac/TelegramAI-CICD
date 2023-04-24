@@ -23,8 +23,8 @@ FROM jenkins/agent
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/
 COPY --from=installer /usr/local/aws-cli/ /usr/local/aws-cli/
 COPY --from=installer /aws-cli-bin/ /usr/local/bin/
-COPY --from=installer /usr/local/bin/kubectl /usr/local/bin/
-COPY --from=installer /usr/bin/terraform /usr/local/bin/
-COPY --from=installer /usr/local/bin/terragrunt /usr/local/bin/
+COPY --from=installer /usr/local/bin/kubectl /usr/local/bin/kubectl
+COPY --from=installer /usr/bin/terraform /usr/local/bin/terraform
+COPY --from=installer /usr/local/bin/terragrunt /usr/local/bin/terragrunt
 
 
