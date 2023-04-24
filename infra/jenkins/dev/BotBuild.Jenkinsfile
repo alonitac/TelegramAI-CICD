@@ -17,6 +17,10 @@ pipeline {
         string(name: 'ImageName', defaultValue: 'bot')
         string(name: 'DockerFilePath', defaultValue: 'bot/Dockerfile')
     }
+    environemnt {
+        AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
+        AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
+    }
     stages {
         stage('DockerBuild') {
             steps {
@@ -30,17 +34,19 @@ pipeline {
         }
         stage('DockerPush') {
             steps {
-                sh '''
-                BRANCH_NAME=${GIT_BRANCH##*/}
-                DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
-                cd ./deploy/terragrunt/eu-west-1/vpc/
-                terragrunt init
-                terragrunt plan -lock=false
-                aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
-                aws ecr describe-repositories --repository-names ${DOCKER_IMG} | aws ecr create-repository --repository-name ${DOCKER_IMG} --region ${Region}
-                docker push ${FULL_DOCKER_IMG}
-                '''
+                withAWS(credentials: 'AKIA2GMYABLLPVYAGEN5', region: 'us-east-1')
+                    sh '''
+                    BRANCH_NAME=${GIT_BRANCH##*/}
+                    DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
+                    FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
+                    cd ./deploy/terragrunt/eu-west-1/vpc/
+                    terragrunt init
+                    terragrunt plan -lock=false
+                    aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
+                    aws ecr describe-repositories --repository-names ${DOCKER_IMG} | aws ecr create-repository --repository-name ${DOCKER_IMG} --region ${Region}
+                    docker push ${FULL_DOCKER_IMG}
+                    '''
+                }
             }
         }
 
