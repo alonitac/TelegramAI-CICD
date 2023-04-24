@@ -14,7 +14,7 @@ terraform {
 
 
 inputs = {
-  aws_access_key = get_env("AWS_ACCESS_KEY", "")
-  aws_secret_key = get_env("AWS_ACCESS_SECRET", "")
+  aws_access_key = get_env("AWS_ACCESS_KEY")
+  aws_secret_key = get_env("AWS_ACCESS_SECRET")
   region = local.path[0]
 }
