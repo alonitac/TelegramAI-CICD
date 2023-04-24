@@ -5,8 +5,8 @@ module "ec2-instance" {
   instance_type               = "t2.medium"
   key_name                    = "tamir-key"
   subnet_id                   = element(var.vpc_private_subnets, 0)
-  user_data                   = file("/Users/tamirnator/Desktop/DevopsCourse/TelegramAI-CICD/deploy/terragrunt/scripts/k0s-init.sh")
-  disable_api_termination = false
+  user_data                   = file("/Users/tamirnator/Desktop/DevopsCourse/TelegramAI-CICD/deploy/terragrunt/tfscripts/k0s-init.sh")
+  disable_api_termination = true
   vpc_security_group_ids = [
     aws_security_group.aws_ec2_sg.id
   ]

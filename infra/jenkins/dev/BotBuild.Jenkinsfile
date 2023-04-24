@@ -34,14 +34,10 @@ pipeline {
                 BRANCH_NAME=${GIT_BRANCH##*/}
                 DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
+                cd ./deploy/terragrunt/eu-west-1/vpc/
+                terragrunt plan -lock=false
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
-                var=$(aws ecr describe-repositories --repository-names ${DOCKER_IMG} > /dev/null 2>&1 > temp.txt)
-                status=$?
-                if [[ ! "${status}" -eq 0 ]]; then
-                    aws ecr create-repository --repository-name ${DOCKER_IMG} --region ${Region}
-                else
-                    echo "${DOCKER_IMG} in region ${Region} already exists"
-                fi
+                aws ecr describe-repositories --repository-names ${DOCKER_IMG} | aws ecr create-repository --repository-name ${DOCKER_IMG} --region ${Region}
                 docker push ${FULL_DOCKER_IMG}
                 '''
             }
