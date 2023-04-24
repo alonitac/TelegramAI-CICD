@@ -26,5 +26,5 @@ COPY --from=installer /aws-cli-bin/ /usr/local/bin/
 COPY --from=installer /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=installer /usr/bin/terraform /usr/local/bin/terraform
 COPY --from=installer /usr/local/bin/terragrunt /usr/local/bin/
-
+RUN chmod +x /usr/local/bin/terragrunt
 
