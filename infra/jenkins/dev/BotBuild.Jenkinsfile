@@ -16,11 +16,11 @@ pipeline {
         string(name: 'ImageTag', defaultValue: 'latest')
         string(name: 'ImageName', defaultValue: 'bot')
         string(name: 'DockerFilePath', defaultValue: 'bot/Dockerfile')
-        string(name: 'BRANCH_NAME_Test', defaultValue: '`${GIT_BRANCH##*/}`')
     }
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
+        BRANCH_NAME_Test = ${GIT_BRANCH##*/}
     }
     stages {
         stage('DockerBuild') {
