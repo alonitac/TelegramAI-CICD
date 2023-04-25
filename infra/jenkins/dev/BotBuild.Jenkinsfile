@@ -33,8 +33,8 @@ pipeline {
                 withEnv(['BRANCH_NAME=${GIT_BRANCH##*/}']) {
                     sh "echo ${BRANCH_NAME}"
                 }
-                withEnv(['DOCKER_IMG=${ECRRepo}/${env.BRANCH_NAME}/${ImageName}']) {
-                    sh "echo ${BRANCH_NAME}"
+                withEnv(['DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}']) {
+                    sh "echo ${DOCKER_IMG}"
                 }
             } 
         }
