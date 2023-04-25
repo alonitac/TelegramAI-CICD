@@ -29,15 +29,6 @@ pipeline {
                     DOCKER_IMG = '${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
                     BRANCH_NAME = '${GIT_BRANCH##*/}'
                 }
-                withEnv(['BRANCH_NAME=${GIT_BRANCH##*/}']) {
-                    sh "echo ${BRANCH_NAME}"
-                }
-                withEnv(['DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}']) {
-                    sh "echo ${DOCKER_IMG}"
-                }
-                withEnv(['FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}']) {
-                    sh "echo ${FULL_DOCKER_IMG}"
-                }
             } 
         }
         stage('DockerBuild') {
