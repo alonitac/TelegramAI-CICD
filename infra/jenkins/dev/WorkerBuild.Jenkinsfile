@@ -17,24 +17,31 @@ pipeline {
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
+        DOCKER_IMG = ''
+        FULL_DOCKER_IMG = ''
     }
     stages {
         stage('DockerBuild') {
             steps {
                 sh '''
-                docker build -f ${DockerFilePath} -t ${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag} .
+                DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
+                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
         }
         stage('DockerPush') {
             steps {
                 sh '''
+                DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
+
                 cd ./deploy/terragrunt/eu-west-1/ecr/worker/
                 terragrunt init
-                terragrunt apply -lock=false -var=repo_name=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName} --auto-approve
+                terragrunt apply -lock=false -var=repo_name=${DOCKER_IMG} --auto-approve
                 
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
-                docker push ${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
+                docker push ${FULL_DOCKER_IMG}
                 '''
             }
         }
