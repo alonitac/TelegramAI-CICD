@@ -20,13 +20,11 @@ pipeline {
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
-        BRANCH_NAME_Test = "${GIT_BRANCH##*/}"
     }
     stages {
         stage('DockerBuild') {
             steps {
                 sh '''
-                echo ${BRANCH_NAME_Test}
                 BRANCH_NAME=${GIT_BRANCH##*/}
                 DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
