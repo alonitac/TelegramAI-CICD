@@ -26,10 +26,16 @@ pipeline {
         stage('SetEnvVar') {
             steps {
                 sh '''
-                    export BRANCH_NAME='${GIT_BRANCH##*/}'
+                    BRANCH_NAME='${GIT_BRANCH##*/}'
                     export DOCKER_IMG='${ECRRepo}/${BRANCH_NAME}/${ImageName}'
                     export FULL_DOCKER_IMG='${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}'
                 '''
+                withEnv(['BRANCH_NAME=${GIT_BRANCH##*/}']) {
+                    sh "echo ${BRANCH_NAME}"
+                }
+                withEnv(['DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}']) {
+                    sh "echo ${BRANCH_NAME}"
+                }
             } 
         }
         stage('DockerBuild') {
