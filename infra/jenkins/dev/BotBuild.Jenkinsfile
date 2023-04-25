@@ -36,7 +36,7 @@ pipeline {
             steps {
                 sh '''
                 echo "$DOCKER_IMG"
-                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
+                docker build -f ${DockerFilePath} -t ${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}' .
                 '''
             }
         }
@@ -45,7 +45,7 @@ pipeline {
                 sh '''
                 cd ./deploy/terragrunt/eu-west-1/ecr/bot/
                 terragrunt init
-                terragrunt apply -lock=false -var=repo_name=${DOCKER_IMG} --auto-approve
+                terragrunt apply -lock=false -var=repo_name=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName} --auto-approve
                 
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
                 docker push ${FULL_DOCKER_IMG}
