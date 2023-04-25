@@ -17,12 +17,14 @@ pipeline {
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
+        DOCKER_IMG = ''
+        FULL_DOCKER_IMG = ''
     }
     stages {
         stage('DockerBuild') {
             steps {
                 sh '''
-                DOCKER_IMG = '${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
+                DOCKER_IMG='${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
                 FULL_DOCKER_IMG='${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}'
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
