@@ -25,10 +25,10 @@ pipeline {
     stages {
         stage('SetEnvVar') {
             steps {
-                withEnv(['BRANCH_NAME=${GIT_BRANCH##*/}'])
-                withEnv(['DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}'])
-                withEnv(['FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}'])
-            }
+                withEnv(['BRANCH_NAME=${GIT_BRANCH##*/}']) { sh "echo $BRANCH_NAME" }
+                withEnv(['DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}']) { sh "echo $DOCKER_IMG" }
+                withEnv(['FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}']) { sh "echo $FULL_DOCKER_IMG" }
+            } 
         }
         stage('DockerBuild') {
             steps {
