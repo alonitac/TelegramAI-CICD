@@ -24,7 +24,11 @@ pipeline {
     stages {
         stage('SetEnvVar') {
             steps {
-                withEnv(['FULL_DOCKER_IMG=test']) {
+                script {
+                    env.DOCKER_IMG = '${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
+                    env.BRANCH_NAME = '${GIT_BRANCH##*/}'
+                }
+                withEnv(['FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}']) {
                     sh 'echo ${FULL_DOCKER_IMG}'
                 }
             } 
@@ -32,7 +36,7 @@ pipeline {
         stage('DockerBuild') {
             steps {
                 sh '''
-                docker build -f ${DockerFilePath} -t ${env.FULL_DOCKER_IMG} .
+                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
         }
