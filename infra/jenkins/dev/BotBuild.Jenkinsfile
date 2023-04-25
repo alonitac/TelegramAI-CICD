@@ -38,9 +38,7 @@ pipeline {
                 BRANCH_NAME=${GIT_BRANCH##*/}
                 DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
-                echo ${AWS_ACCESS_KEY}
-                echo ${AWS_ACCESS_SECRET}
-                cd ./deploy/terragrunt/eu-west-1/vpc/
+                cd ./deploy/terragrunt/eu-west-1/ecr/
                 terragrunt init
                 terragrunt plan -lock=false
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
