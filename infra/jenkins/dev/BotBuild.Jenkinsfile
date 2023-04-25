@@ -31,6 +31,7 @@ pipeline {
                 withEnv(['FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}']) {
                     sh 'echo ${FULL_DOCKER_IMG}'
                 }
+                sh 'echo $DOCKER_IMG'
             } 
         }
         stage('DockerBuild') {
