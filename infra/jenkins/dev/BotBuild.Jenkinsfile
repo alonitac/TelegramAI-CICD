@@ -1,3 +1,5 @@
+def 
+
 pipeline {
     agent {
         docker {
@@ -35,6 +37,9 @@ pipeline {
                 }
                 withEnv(['DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}']) {
                     sh "echo ${DOCKER_IMG}"
+                }
+                withEnv(['FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}']) {
+                    sh "echo ${FULL_DOCKER_IMG}"
                 }
             } 
         }
