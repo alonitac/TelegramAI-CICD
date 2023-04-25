@@ -31,7 +31,7 @@ pipeline {
         //         }
         //         sh 'echo $DOCKER_IMG'
         //     } 
-        }
+        // }
         stage('DockerBuild') {
             steps {
                 sh '''
