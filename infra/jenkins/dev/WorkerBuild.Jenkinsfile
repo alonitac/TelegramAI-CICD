@@ -29,7 +29,7 @@ pipeline {
         stage('DockerPush') {
             steps {
                 sh '''
-                cd ./deploy/terragrunt/eu-west-1/ecr/bot/
+                cd ./deploy/terragrunt/eu-west-1/ecr/worker/
                 terragrunt init
                 terragrunt apply -lock=false -var=repo_name=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName} --auto-approve
                 
