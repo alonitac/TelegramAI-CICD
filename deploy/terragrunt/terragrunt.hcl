@@ -21,8 +21,8 @@ remote_state {
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = "${local.path[0]}"
     dynamodb_table = "my-lock-table"
-    access_key = get_env("AWS_ACCESS_KEY", "")
-    secret_key = get_env("AWS_ACCESS_SECRET", "")
+    access_key = get_env("AWS_ACCESS_KEY")
+    secret_key = get_env("AWS_ACCESS_SECRET")
   }
 }
 

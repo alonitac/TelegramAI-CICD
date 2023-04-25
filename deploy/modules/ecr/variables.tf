@@ -1,9 +1,19 @@
-variable "vpc_id" {
+variable "repo_name" {
   description = "Hosted AWS VPC for EKS cluster"
   type = string
 }
 
-variable "vpc_private_subnets" {
-  description = "AWS VPC assosicated private subnets"
-  type = list(string)
+variable "aws_access_key" {
+  description = "AWS access key"
+  type = string
+}
+
+variable "aws_access_secret" {
+  description = "AWS access secret"
+  type = string
+}
+
+variable "region" {
+  description = "AWS region"
+  type = string
 }
