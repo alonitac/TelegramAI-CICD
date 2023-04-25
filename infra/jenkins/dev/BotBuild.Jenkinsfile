@@ -20,6 +20,7 @@ pipeline {
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
+        FULL_DOCKER_IMG='${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}'
     }
     stages {
         stage('DockerBuild') {
@@ -27,7 +28,6 @@ pipeline {
                 sh '''
                 BRANCH_NAME=${GIT_BRANCH##*/}
                 DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
@@ -37,7 +37,6 @@ pipeline {
                 sh '''
                 BRANCH_NAME=${GIT_BRANCH##*/}
                 DOCKER_IMG=${ECRRepo}/${BRANCH_NAME}/${ImageName}
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${BRANCH_NAME}/${ImageName}:${ImageTag}
 
                 cd ./deploy/terragrunt/eu-west-1/ecr/bot/
                 terragrunt init
