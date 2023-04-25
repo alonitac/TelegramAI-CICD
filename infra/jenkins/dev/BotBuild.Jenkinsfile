@@ -31,7 +31,7 @@ pipeline {
         stage('DockerPush') {
             steps {
                 sh '''
-                DOCKER_IMG = '${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
+                DOCKER_IMG='${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
                 FULL_DOCKER_IMG='${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}'
 
                 cd ./deploy/terragrunt/eu-west-1/ecr/bot/
