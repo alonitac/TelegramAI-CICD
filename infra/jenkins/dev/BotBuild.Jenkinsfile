@@ -28,7 +28,7 @@ pipeline {
                     env.DOCKER_IMG = '${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
                     env.BRANCH_NAME = '${GIT_BRANCH##*/}'
                 }
-                withEnv(['FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}']) {
+                withEnv(['FULL_DOCKER_IMG=test']) {
                     sh 'echo ${FULL_DOCKER_IMG}'
                 }
             } 
