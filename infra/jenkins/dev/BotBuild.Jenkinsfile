@@ -47,7 +47,7 @@ pipeline {
                 terragrunt apply -lock=false -var=repo_name=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName} --auto-approve
                 
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
-                docker push ${FULL_DOCKER_IMG}
+                docker push ${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
                 '''
             }
         }
