@@ -36,6 +36,7 @@ pipeline {
         stage('DockerBuild') {
             steps {
                 sh '''
+                echo 'env.DOCKER_IMG .. ${env.DOCKER_IMG} .. ${DOCKER_IMG}'
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
