@@ -20,7 +20,7 @@ pipeline {
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
-        BRANCH_NAME_Test = '${GIT_BRANCH##*/}'
+        BRANCH_NAME_Test = "${GIT_BRANCH##*/}"
     }
     stages {
         stage('DockerBuild') {
