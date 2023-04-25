@@ -24,10 +24,6 @@ pipeline {
     stages {
         stage('SetEnvVar') {
             steps {
-                script {
-                    env.DOCKER_IMG = '${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
-                    env.BRANCH_NAME = '${GIT_BRANCH##*/}'
-                }
                 withEnv(['FULL_DOCKER_IMG=test']) {
                     sh 'echo ${FULL_DOCKER_IMG}'
                 }
