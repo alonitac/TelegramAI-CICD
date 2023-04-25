@@ -37,7 +37,6 @@ pipeline {
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
 
                 cd ./deploy/terragrunt/eu-west-1/ecr/worker/
-                terragrunt help
                 terragrunt init
                 terragrunt apply -lock=false -var=repo_name=${DOCKER_IMG} --auto-approve
                 
