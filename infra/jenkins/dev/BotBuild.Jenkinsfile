@@ -17,9 +17,6 @@ pipeline {
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
-        BRANCH_NAME = ''
-        DOCKER_IMG = ''
-        FULL_DOCKER_IMG = ''
     }
     stages {
         stage('SetEnvVar') {
