@@ -1,5 +1,3 @@
-def FULL_DOCKER_IMG
-
 pipeline {
     agent {
         docker {
@@ -21,10 +19,16 @@ pipeline {
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
         BRANCH_NAME = ''
         DOCKER_IMG = ''
+        FULL_DOCKER_IMG = ''
     }
     stages {
         stage('SetEnvVar') {
             steps {
+                script {
+                    FULL_DOCKER_IMG = '${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}'
+                    DOCKER_IMG = '${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
+                    BRANCH_NAME = '${GIT_BRANCH##*/}'
+                }
                 withEnv(['BRANCH_NAME=${GIT_BRANCH##*/}']) {
                     sh "echo ${BRANCH_NAME}"
                 }
