@@ -19,18 +19,18 @@ pipeline {
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
     }
     stages {
-        stage('SetEnvVar') {
-            steps {
-                script {
-                    def branch 
-                    env.DOCKER_IMG = '${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
-                    env.BRANCH_NAME = '${GIT_BRANCH##*/}'
-                }
-                withEnv(['FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}']) {
-                    sh 'echo ${FULL_DOCKER_IMG}'
-                }
-                sh 'echo $DOCKER_IMG'
-            } 
+        // stage('SetEnvVar') {
+        //     steps {
+        //         script {
+        //             def branch 
+        //             env.DOCKER_IMG = '${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}'
+        //             env.BRANCH_NAME = '${GIT_BRANCH##*/}'
+        //         }
+        //         withEnv(['FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}']) {
+        //             sh 'echo ${FULL_DOCKER_IMG}'
+        //         }
+        //         sh 'echo $DOCKER_IMG'
+        //     } 
         }
         stage('DockerBuild') {
             steps {
