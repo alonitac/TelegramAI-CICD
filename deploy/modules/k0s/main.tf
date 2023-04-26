@@ -5,7 +5,7 @@ module "ec2-instance" {
   instance_type               = "t2.medium"
   key_name                    = "tamir-key"
   subnet_id                   = element(var.vpc_private_subnets, 0)
-  user_data                   = file("/Users/tamirnator/Desktop/DevopsCourse/TelegramAI-CICD/deploy/terragrunt/tfscripts/k0s-init.sh")
+  user_data                   = file("/Users/tamirnator/Desktop/DevopsCourse/TelegramAI-CICD/deploy/terragrunt/scripts/k0s-init.sh")
   disable_api_termination = true
   vpc_security_group_ids = [
     aws_security_group.aws_ec2_sg.id
@@ -33,7 +33,7 @@ resource "aws_eip" "k0s" {
 
 resource "aws_security_group" "aws_ec2_sg" {
   name        = "tamir-k0s-sg-tf"
-  description = "Allow traffic to Jenkins server"
+  description = "Allow traffic to K0S server"
   vpc_id      = var.vpc_id
 
   egress {

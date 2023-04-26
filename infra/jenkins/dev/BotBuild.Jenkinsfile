@@ -46,9 +46,6 @@ pipeline {
                 '''
             }
         }
-
-        
-
         // stage('Trigger- Deploy') {
         //     steps {
         //         build job: 'BotDeploy', wait: false, parameters: [
@@ -61,5 +58,20 @@ pipeline {
                 // aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.us-east-1.amazonaws.com
                 
                 
+    }
+    post { 
+        success { 
+            sh '''
+            cd bot
+            fullVersion=$(cat VERSION)
+            IFS='.' read v1 v2 v3 <<< $fullVersion
+            echo "### version before increment: " $fullVersion
+            ((v3++))
+            newVersion="${v1}.${v2}.${v3}"
+            echo "### version after increment: " $newVersion"
+            echo $newVersion >>> VERSION
+            echo 'file:  $(cat VERSION)'
+            '''
+        }
     }
 }
