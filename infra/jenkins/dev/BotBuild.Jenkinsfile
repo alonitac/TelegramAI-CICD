@@ -26,7 +26,7 @@ pipeline {
                 sh '''
                 cd bot
                 fullVersion=$(cat VERSION)
-                $(IFS='.' read v1 v2 v3 <<< $fullVersion)
+                $(IFS='.' read v1 v2 v3 <<< echo $fullVersion)
                 echo "### version before increment: " $fullVersion
                 ((v3++))
                 newVersion="${v1}.${v2}.${v3}"
