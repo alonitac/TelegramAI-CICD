@@ -24,17 +24,9 @@ pipeline {
         stage('DockerBuild') {
             steps {
                 sh '''
-                cd bot
-                fullVersion=$(cat VERSION)
-                $(IFS='.' read v1 v2 v3 <<< echo $fullVersion)
-                echo "### version before increment: " $fullVersion
-                ((v3++))
-                newVersion="${v1}.${v2}.${v3}"
-                echo "### version after increment: " $newVersion"
-                echo $newVersion >>> VERSION
-                echo 'file:  $(cat VERSION)'
+                version=$(cat bot/VERSION)
                 DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
@@ -42,8 +34,9 @@ pipeline {
         stage('DockerPush') {
             steps {
                 sh '''
+                version=$(cat bot/VERSION)
                 DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
 
                 cd ./deploy/terragrunt/eu-west-1/ecr/bot/
                 terragrunt init
@@ -66,20 +59,5 @@ pipeline {
                 // aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.us-east-1.amazonaws.com
                 
                 
-    }
-    post { 
-        success { 
-            sh '''
-            cd bot
-            fullVersion=$(cat VERSION)
-            $(IFS='.' read v1 v2 v3 <<< $fullVersion)
-            echo "### version before increment: " $fullVersion
-            ((v3++))
-            newVersion="${v1}.${v2}.${v3}"
-            echo "### version after increment: " $newVersion"
-            echo $newVersion >>> VERSION
-            echo 'file:  $(cat VERSION)'
-            '''
-        }
     }
 }
