@@ -19,11 +19,15 @@ RUN curl https://releases.hashicorp.com/terraform/1.4.5/terraform_1.4.5_linux_am
   && mv terraform /usr/bin \
   && rm terraform_1.4.5_linux_amd64.zip
 
+RUN yum install -y git \
+  && chmod u+x /usr/bin/git
+
 FROM jenkins/agent
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/
 COPY --from=installer /usr/local/aws-cli/ /usr/local/aws-cli/
 COPY --from=installer /aws-cli-bin/ /usr/local/bin/
 COPY --from=installer /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=installer /usr/bin/terraform /usr/local/bin/terraform
+COPY --from=installer /usr/bin/git /usr/local/bin/
 COPY --from=installer /usr/local/bin/terragrunt /usr/local/bin/
 
