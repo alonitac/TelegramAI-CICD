@@ -24,7 +24,15 @@ pipeline {
         stage('DockerBuild') {
             steps {
                 sh '''
-                printenv
+                cd bot
+                fullVersion=$(cat VERSION)
+                $(IFS='.' read v1 v2 v3 <<< $fullVersion)
+                echo "### version before increment: " $fullVersion
+                ((v3++))
+                newVersion="${v1}.${v2}.${v3}"
+                echo "### version after increment: " $newVersion"
+                echo $newVersion >>> VERSION
+                echo 'file:  $(cat VERSION)'
                 DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
