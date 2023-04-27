@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             // TODO build & push your Jenkins agent image, place the URL here
-            image '700935310038.dkr.ecr.eu-west-1.amazonaws.com/tamir/jenkins/agent:1.0'
+            image '700935310038.dkr.ecr.eu-west-1.amazonaws.com/tamir/jenkins/agent:1.1'
             args  '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -27,6 +27,7 @@ pipeline {
                 version=$(cat bot/VERSION)
                 DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
+                git status
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
