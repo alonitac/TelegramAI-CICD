@@ -14,6 +14,9 @@ pipeline {
         string(name: 'ImageName', defaultValue: 'bot')
         string(name: 'DockerFilePath', defaultValue: 'bot/Dockerfile')
     }
+
+
+    // 700935310038.dkr.ecr.eu-west-1.amazonaws.com/tamir/jenkins/bo
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
@@ -27,8 +30,10 @@ pipeline {
                 version=$(cat bot/VERSION)
                 DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
+                
                 git config --global --add safe.directory /var/lib/jenkins/workspace/dev/BuildBot
                 git status
+
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
@@ -49,17 +54,16 @@ pipeline {
                 '''
             }
         }
-        // stage('Trigger- Deploy') {
-        //     steps {
-        //         build job: 'BotDeploy', wait: false, parameters: [
-        //             string(name: 'BOT_IMAGE_NAME', value: "700935310038.dkr.ecr.us-east-1.amazonaws.com/tamir/jenkins/bot:jenkins")
-        //         ]
-        //     }
-        // }
-
-                // docker build -f bot/Dockerfile -t 700935310038.dkr.ecr.us-east-1.amazonaws.com/tamir/jenkins/bot:jenkins .
-                // aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 700935310038.dkr.ecr.us-east-1.amazonaws.com
-                
-                
+        stage('Trigger- Deploy') {
+            steps {
+                sh '''
+                version=$(cat bot/VERSION)
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
+                '''
+                build job: 'BotDeploy', wait: false, parameters: [
+                    string(name: 'BOT_IMAGE_NAME', value: "${FULL_DOCKER_IMG}")
+                ]
+            }
+        }       
     }
 }
