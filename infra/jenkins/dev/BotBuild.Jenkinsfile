@@ -31,7 +31,7 @@ pipeline {
                 DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 
-                git config --global --add safe.directory /var/lib/jenkins/workspace/dev/BuildBot
+                git config --global --add safe.directory /var/lib/jenkins/workspace/dev/bot/BuildBot
                 git status
 
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
