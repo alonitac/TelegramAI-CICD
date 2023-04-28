@@ -61,7 +61,7 @@ pipeline {
             steps {
                 sh '''
                 version=$(cat bot/VERSION)
-                export env.FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
+                env.FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo env.FULL_DOCKER_IMG
                 '''
                 build job: 'DeployBot', wait: false, parameters: [
