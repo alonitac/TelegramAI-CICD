@@ -48,7 +48,7 @@ pipeline {
         post {
         always {
             echo 'Cleaning up terraratnt cache ... '
-            deleteDir() /* clean up our workspace */
+            deleteDir() /* clean up our workspace  */
             sh 'sudo find / -type f -name .terragrunt-cache -exec rm {} \;'
         }
         success {
