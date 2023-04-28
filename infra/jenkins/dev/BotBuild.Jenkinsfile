@@ -61,7 +61,7 @@ pipeline {
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 '''
                 build job: 'DeployBot', wait: false, parameters: [
-                    string(name: 'BOT_IMAGE_NAME', value: "env.FULL_DOCKER_IMG")
+                    string(name: 'BOT_IMAGE_NAME', value: "${FULL_DOCKER_IMG}")
                 ]
             }
         }       
