@@ -57,7 +57,7 @@ pipeline {
         stage('Trigger- Deploy') {
             environment {
                 version='$(cat bot/VERSION)'
-                FULL_DOCKER_IMG='${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}'
+                FULL_DOCKER_IMG='${params.ECRRegistry}/${params.ECRRepo}/${GIT_BRANCH##*/}/${params.ImageName}:${env.version}'
             }
             steps {
                 build job: 'DeployBot', wait: false, parameters: [
