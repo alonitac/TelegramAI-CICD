@@ -35,16 +35,36 @@ pipeline {
                 sh '''
                 DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
-
                 cd ./deploy/terragrunt/eu-west-1/ecr/worker/
                 terragrunt init
                 terragrunt apply -lock=false -var=repo_name=${DOCKER_IMG} --auto-approve
-                
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
                 docker push ${FULL_DOCKER_IMG}
                 '''
             }
         }
-    // TODO dev worker build stages here
     }
+
+        post {
+        always {
+            echo 'Cleaning up terraratnt cache ... '
+            deleteDir() /* clean up our workspace */
+            sh 'sudo find / -type f -name .terragrunt-cache -exec rm {} \;'
+        }
+        success {
+            echo 'I succeeded!'
+        }
+        unstable {
+            echo 'I am unstable :/'
+        }
+        failure {
+            echo 'I failed :('
+        }
+        changed {
+            echo 'Things were different before...'
+        }
+        
+        }  
+    // TODO dev worker build stages here
+    
 }
