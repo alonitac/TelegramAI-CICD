@@ -63,7 +63,7 @@ pipeline {
             echo 'Cleaning up terraratnt cache ... '
             //deleteDir() /* clean up our workspace */
             sh '''
-            find / -type f -name .terragrunt-cache -delete
+            sudo su - ec2-user find / -type f -name .terragrunt-cache -delete
             '''
         }
         success {
