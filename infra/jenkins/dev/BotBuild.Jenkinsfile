@@ -55,6 +55,10 @@ pipeline {
             }
         }
         stage('Trigger- Deploy') {
+            environment {
+                version=''
+                FULL_DOCKER_IMG=''
+            }
             steps {
                 sh '''
                 version=$(cat bot/VERSION)
