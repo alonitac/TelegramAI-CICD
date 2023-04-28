@@ -58,7 +58,7 @@ pipeline {
     // TODO dev worker build stages here
      }
 
-        post {
+    post {
         always {
             echo 'Cleaning up terraratnt cache ... '
             //deleteDir() /* clean up our workspace */
