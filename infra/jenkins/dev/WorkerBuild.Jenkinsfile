@@ -23,26 +23,27 @@ pipeline {
     stages {
         stage('DockerBuild') {
             steps {
-                sh '''
-                DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
-                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
-                '''
+                echo "Test"
+                // sh '''
+                // DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
+                // FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
+                // docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
+                // '''
             }
         }
-        stage('DockerPush') {
-            steps {
-                sh '''
-                DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
-                cd ./deploy/terragrunt/eu-west-1/ecr/worker/
-                terragrunt init
-                terragrunt apply -lock=false -var=repo_name=${DOCKER_IMG} --auto-approve
-                aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
-                docker push ${FULL_DOCKER_IMG}
-                '''
-            }
-        }
+        // stage('DockerPush') {
+        //     steps {
+        //         sh '''
+        //         DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
+        //         FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
+        //         cd ./deploy/terragrunt/eu-west-1/ecr/worker/
+        //         terragrunt init
+        //         terragrunt apply -lock=false -var=repo_name=${DOCKER_IMG} --auto-approve
+        //         aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
+        //         docker push ${FULL_DOCKER_IMG}
+        //         '''
+        //     }
+        // }
         // stage('Trigger- Deploy') {
         //     steps {
         //         sh '''
@@ -62,7 +63,7 @@ pipeline {
             echo 'Cleaning up terraratnt cache ... '
             deleteDir() /* clean up our workspace  */
             sh '''
-            sudo find / -type f -name .terragrunt-cache -exec rm {} 
+            find / -type f -name .terragrunt-cache -delete
             '''
         }
         success {
