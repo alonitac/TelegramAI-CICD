@@ -26,6 +26,7 @@ pipeline {
             steps {
                 echo "Test"
                 sh '''
+                echo 'FULL_DOCKER_IMG is :' ${FULL_DOCKER_IMG}
                 DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
