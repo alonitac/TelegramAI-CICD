@@ -44,11 +44,6 @@ pipeline {
                 version=$(cat bot/VERSION)
                 DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
-
-                cd ./deploy/terragrunt/eu-west-1/ecr/bot/
-                terragrunt init
-                terragrunt apply -lock=false -var=repo_name=${DOCKER_IMG} --auto-approve
-                
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
                 docker push ${FULL_DOCKER_IMG}
                 '''
