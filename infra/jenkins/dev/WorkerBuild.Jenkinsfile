@@ -53,7 +53,6 @@ pipeline {
                 '''
                 build job: 'DeployWorker', wait: false, parameters: [
                     string(name: 'Worker_IMAGE_NAME', value: '${FULL_DOCKER_IMG}')
-                    sh 'echo ${FULL_DOCKER_IMG}' 
                 ]
             }
         }
@@ -72,8 +71,8 @@ pipeline {
         }
         success {
             echo 'I succeeded!'
-            // echo 'Cleaning up terraratnt cache ... '
-            // //deleteDir() /* clean up our workspace */
+            echo 'Cleaning up terraratnt cache ... '
+            deleteDir() /* clean up our workspace */
             // sh '''
             // echo "sudo su - ec2-user find / -type f -name .terragrunt-cache -delete"
             // '''
