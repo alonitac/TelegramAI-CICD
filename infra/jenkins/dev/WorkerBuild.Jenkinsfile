@@ -53,6 +53,7 @@ pipeline {
                 '''
                 build job: 'DeployWorker', wait: false, parameters: [
                     string(name: 'Worker_IMAGE_NAME', value: '${FULL_DOCKER_IMG}')
+                    sh 'echo ${FULL_DOCKER_IMG}' 
                 ]
             }
         }
