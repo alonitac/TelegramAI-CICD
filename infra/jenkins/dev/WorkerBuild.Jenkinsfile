@@ -60,14 +60,15 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up terraratnt cache ... '
-            //deleteDir() /* clean up our workspace */
-            sh '''
-            echo "sudo su - ec2-user find / -type f -name .terragrunt-cache -delete"
-            '''
+
         }
         success {
             echo 'I succeeded!'
+            echo 'Cleaning up terraratnt cache ... '
+            //deleteDir() /* clean up our workspace */
+            sh '''
+            sudo su - ec2-user find / -type f -name .terragrunt-cache -delete
+            '''
         }
         unstable {
             echo 'I am unstable :/'
