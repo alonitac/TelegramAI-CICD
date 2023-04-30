@@ -53,7 +53,7 @@ pipeline {
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 '''
                 build job: 'DeployWorker', wait: false, parameters: [
-                     string(name: 'Worker_IMAGE_NAME', value: "${FULL_DOCKER_IMG}")
+                     string(name: 'Worker_IMAGE_NAME', value: '${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}')
                 ]
             }
         }
