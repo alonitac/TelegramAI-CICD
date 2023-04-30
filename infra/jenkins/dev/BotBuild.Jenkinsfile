@@ -54,7 +54,7 @@ pipeline {
                 sh '''
                 version=$(cat bot/VERSION)
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
-                echo FULL_DOCKER_IMG
+                echo $FULL_DOCKER_IMG
                 '''
                 build job: 'DeployBot', wait: false, parameters: [ string(name: 'BOT_IMAGE_NAME', value: "$FULL_DOCKER_IMG") ]
             }
