@@ -54,7 +54,7 @@ pipeline {
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 '''
                 build job: 'DeployWorker', wait: false, parameters: [
-                    string(name: 'Worker_IMAGE_NAME', value: string..valueof(FULL_DOCKER_IMG))
+                    string(name: 'Worker_IMAGE_NAME', value: String.valueOf(FULL_DOCKER_IMG))
                 ]
             }
         }
