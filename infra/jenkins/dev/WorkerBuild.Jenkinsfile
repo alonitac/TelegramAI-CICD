@@ -19,7 +19,6 @@ pipeline {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
         DOCKER_IMG = ''
-        FULL_DOCKER_IMG= ''
     }
     stages {
         stage('DockerBuild') {
@@ -54,7 +53,7 @@ pipeline {
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 '''
                 build job: 'DeployWorker', wait: false, parameters: [
-                    [$class: 'StringParameterValue', string(name: 'Worker_IMAGE_NAME', value: String.valueOf(FULL_DOCKER_IMG))]
+                     string(name: 'Worker_IMAGE_NAME', value: "${FULL_DOCKER_IMG}"))
                 ]
             }
         }
