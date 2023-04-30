@@ -13,7 +13,7 @@ pipeline {
         string(name: 'ImageTag', defaultValue: 'latest')
         string(name: 'ImageName', defaultValue: 'worker')
         string(name: 'DockerFilePath', defaultValue: 'worker/Dockerfile')
-        string(name: 'FULL_DOCKER_IMG' , defaultValue: '${${ECRRegistry}/${ECRRepo}/${${GIT_BRANCH##*/}}/${ImageName}:${ImageTag}}')
+        string(name: 'FULL_DOCKER_IMG' , defaultValue: '')
     }
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
