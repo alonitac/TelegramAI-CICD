@@ -23,7 +23,7 @@ pipeline {
                 ]) {
                     sh '''
                     worker_image_name = $(cat worker/latest_img_worker)
-                    echo "worker_image_name: " ${worker_image_name}  
+                    echo "worker_image_name: ${worker_image_name}"  
                     '''
                 }
             }
