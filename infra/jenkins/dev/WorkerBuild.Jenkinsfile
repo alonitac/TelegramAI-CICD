@@ -54,6 +54,7 @@ pipeline {
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 echo $FULL_DOCKER_IMG > worker/latest_img_worker
                 git config --global --add safe.directory /var/lib/jenkins/workspace/dev/worker/BuildWorker
+                git config remote.origin.url 'https://${GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD'
                 cat worker/latest_img_worker
                 git stash push worker/latest_img_worker
                 git checkout main
