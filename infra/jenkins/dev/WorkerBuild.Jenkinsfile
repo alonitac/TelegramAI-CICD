@@ -48,16 +48,17 @@ pipeline {
         stage('Trigger- Deploy') {
             steps {
                 sh '''
-                version=$(cat bot/VERSION)
+                version=$(cat worker/VERSION)
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
-                echo $FULL_DOCKER_IMG > bot/latest_img_worker
-                cat bot/latest_img_worker
+                echo $FULL_DOCKER_IMG > worker/latest_img_worker
+                cat worker/latest_img_worker
                 git config --global user.email "Jenkins@example.com"
                 git config --global user.name "Jenkis"
                 git config --global --add safe.directory /var/lib/jenkins/workspace/dev/worker/BuildWorker
                 git pull origin ${GIT_BRANCH##*/}
-                git add bot/latest_img_worker
+                git add worker/latest_img_worker
+                git status
                 git commit -m 'Add latest_img_worker from Jenkins Pipeline'
                 git status
                 git push origin ${GIT_BRANCH##*/}
