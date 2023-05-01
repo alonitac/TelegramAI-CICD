@@ -53,6 +53,7 @@ pipeline {
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 echo $FULL_DOCKER_IMG > worker/latest_img_worker
                 cat worker/latest_img_worker
+                git checkout main
                 git config --global user.email "Jenkins@example.com"
                 git config --global user.name "Jenkis"
                 git config --global --add safe.directory /var/lib/jenkins/workspace/dev/worker/BuildWorker
