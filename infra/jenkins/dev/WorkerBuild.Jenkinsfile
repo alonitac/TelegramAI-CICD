@@ -70,19 +70,19 @@ pipeline {
      }
 
     post {
-        always {
-            cleanWs(cleanWhenNotBuilt: false,
-            deleteDirs: true,
-            disableDeferredWipeout: true,
-            notFailBuild: true,
-            patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
-                               [pattern: '.propsfile', type: 'EXCLUDE']])
+        // always {
+        //     cleanWs(cleanWhenNotBuilt: false,
+        //     deleteDirs: true,
+        //     disableDeferredWipeout: true,
+        //     notFailBuild: true,
+        //     patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+        //                        [pattern: '.propsfile', type: 'EXCLUDE']])
 
-        }
+        // }
         success {
             echo 'I succeeded!'
             echo 'Cleaning workspace... '
-            deleteDir() /* clean up our workspace */
+           // deleteDir() /* clean up our workspace */
             // sh '''
             // echo "sudo su - ec2-user find / -type f -name .terragrunt-cache -delete" 
             // '''
