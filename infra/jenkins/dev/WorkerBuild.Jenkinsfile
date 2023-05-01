@@ -66,7 +66,6 @@ pipeline {
                 git status
                 git commit -m 'Add latest_img_worker from Jenkins Pipeline'
                 git status
-                git push origin ${GIT_BRANCH##*/}
                 '''
                 
                 build job: 'DeployWorker', wait: false
