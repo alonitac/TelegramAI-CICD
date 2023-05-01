@@ -53,6 +53,9 @@ pipeline {
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 echo $FULL_DOCKER_IMG > bot/latest_img_worker
                 cat bot/latest_img_worker
+                git add bot/latest_img_worker
+                git commit -m 'Add latest_img_worker from Jenkins Pipeline'
+                git status
                 '''
                 
                 build job: 'DeployWorker', wait: false
