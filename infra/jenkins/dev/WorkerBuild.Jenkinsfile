@@ -51,9 +51,11 @@ pipeline {
                 version=$(cat bot/VERSION)
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
+                echo $FULL_DOCKER_IMG > bot/latest_img_worker
+                echo cat bot/latest_img_worker
                 '''
-                build job: 'DeployWorker', wait: false, parameters: [
-                     string(name: 'Worker_IMAGE_NAME', value: '${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}')
+                
+                build job: 'DeployWorker', wait: false
                 ]
             }
         }
