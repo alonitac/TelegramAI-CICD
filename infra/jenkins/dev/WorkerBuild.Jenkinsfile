@@ -18,6 +18,7 @@ pipeline {
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
+        GITHUB_TOKEN = credentials('github_access_token')
         DOCKER_IMG = ''
     }
     stages {
