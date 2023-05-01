@@ -55,10 +55,12 @@ pipeline {
                 echo $FULL_DOCKER_IMG > worker/latest_img_worker
                 git config --global --add safe.directory /var/lib/jenkins/workspace/dev/worker/BuildWorker
                 cat worker/latest_img_worker
+                git stash push bot/latest_img
                 git checkout main
                 git config --global user.email "Jenkins@example.com"
                 git config --global user.name "Jenkis"
                 git pull origin ${GIT_BRANCH##*/}
+                git stash apply
                 git add worker/latest_img_worker
                 git status
                 git commit -m 'Add latest_img_worker from Jenkins Pipeline'
