@@ -11,10 +11,6 @@ pipeline {
         APP_ENV = "dev"
     }
 
-    parameters {
-        string(name: 'BOT_IMAGE_NAME')
-    }
-
     stages {
         stage('Bot Deploy') {
             steps {
@@ -22,7 +18,8 @@ pipeline {
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
-                    echo "image_name: " ${BOT_IMAGE_NAME}  
+                    full_image=$(cat bot/bot/latest_img)
+                    echo "image_name: " ${full_image}  
                     '''
                 }
             }
