@@ -52,7 +52,7 @@ pipeline {
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 echo $FULL_DOCKER_IMG > bot/latest_img_worker
-                echo cat bot/latest_img_worker
+                cat bot/latest_img_worker
                 '''
                 
                 build job: 'DeployWorker', wait: false
