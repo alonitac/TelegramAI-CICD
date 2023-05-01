@@ -56,7 +56,7 @@ pipeline {
                 '''
                 
                 build job: 'DeployWorker', wait: false
-                ]
+                
             }
         }
     // TODO dev worker build stages here
