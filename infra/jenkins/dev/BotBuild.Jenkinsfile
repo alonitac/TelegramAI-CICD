@@ -14,9 +14,6 @@ pipeline {
         string(name: 'ImageName', defaultValue: 'bot')
         string(name: 'DockerFilePath', defaultValue: 'bot/Dockerfile')
     }
-
-
-    // 700935310038.dkr.ecr.eu-west-1.amazonaws.com/tamir/jenkins/bo
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
@@ -54,9 +51,11 @@ pipeline {
                 sh '''
                 version=$(cat bot/VERSION)
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
-                echo $FULL_DOCKER_IMG
-                build job: 'DeployBot', wait: false, parameters: [ string(name: 'BOT_IMAGE_NAME', value: "$FULL_DOCKER_IMG") ]f
+                echo $FULL_DOCKER_IMG > bot/latest_img
+                echo "#### latest_img:"
+                cat bot/latest_img
                 '''
+                build job: 'DeployBot', wait: false
                 
             }
         }       
