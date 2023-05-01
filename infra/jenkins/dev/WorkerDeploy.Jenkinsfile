@@ -12,7 +12,7 @@ pipeline {
     }
 
     parameters {
-        string(name: 'Worker_IMAGE_NAME')
+        string(name: 'worker_image_name')
     }
 
     stages {
@@ -22,8 +22,8 @@ pipeline {
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
-                    Worker_IMAGE_NAME = $(cat bot/latest_img_worker)
-                    echo "WORKER-image_name: " ${Worker_IMAGE_NAME}  
+                    worker_image_name = $(cat worker/latest_img_worker)
+                    echo "worker_image_name: " ${worker_image_name}  
                     '''
                 }
             }
