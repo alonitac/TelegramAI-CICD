@@ -56,11 +56,11 @@ pipeline {
                 git config --global user.email "Jenkins@example.com"
                 git config --global user.name "Jenkis"
                 git config --global --add safe.directory /var/lib/jenkins/workspace/dev/worker/BuildWorker
-                git pull
+                git pull origin ${GIT_BRANCH##*/}
                 git add bot/latest_img_worker
                 git commit -m 'Add latest_img_worker from Jenkins Pipeline'
                 git status
-                git push origin main
+                git push origin ${GIT_BRANCH##*/}
                 '''
                 
                 build job: 'DeployWorker', wait: false
