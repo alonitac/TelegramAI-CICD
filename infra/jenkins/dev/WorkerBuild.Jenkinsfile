@@ -59,6 +59,7 @@ pipeline {
                 git add bot/latest_img_worker
                 git commit -m 'Add latest_img_worker from Jenkins Pipeline'
                 git status
+                git push 
                 '''
                 
                 build job: 'DeployWorker', wait: false
@@ -80,7 +81,7 @@ pipeline {
         }
         success {
             echo 'I succeeded!'
-            echo 'Cleaning up terraratnt cache ... '
+            echo 'Cleaning workspace... '
             deleteDir() /* clean up our workspace */
             // sh '''
             // echo "sudo su - ec2-user find / -type f -name .terragrunt-cache -delete" 
