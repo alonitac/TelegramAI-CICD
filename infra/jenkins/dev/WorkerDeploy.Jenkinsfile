@@ -23,7 +23,7 @@ pipeline {
                 ]) {
                     sh '''
                     Worker_IMAGE_NAME = $(cat bot/latest_img_worker)
-                    echo "image_name: " ${Worker_IMAGE_NAME}  
+                    echo "WORKER-image_name: " ${Worker_IMAGE_NAME}  
                     '''
                 }
             }
