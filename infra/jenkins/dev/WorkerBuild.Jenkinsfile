@@ -54,7 +54,6 @@ pipeline {
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 echo $FULL_DOCKER_IMG > ${WORKER_DIR}/latest_img_worker
-                git config remote.origin.url "https://${env.GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
                 cat ${WORKER_DIR}/${VERSION_FILE}
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
                 ./${SCRIPTS_DIR}/git-push.sh '${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker' ${GIT_BRANCH##*/} '[skip ci] updated version from Jenkins Pipeline'
