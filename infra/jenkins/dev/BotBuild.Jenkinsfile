@@ -56,7 +56,6 @@ pipeline {
                 echo $(cat bot/latest_img)
                 '''
                 build job: 'DeployBot', wait: false
-                
             }
         }       
     }

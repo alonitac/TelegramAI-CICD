@@ -56,17 +56,7 @@ pipeline {
                 git config --global --add safe.directory /var/lib/jenkins/workspace/dev/worker/BuildWorker
                 git config remote.origin.url "https://${GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
                 cat worker/latest_img_worker
-                git stash push worker/latest_img_worker
-                git checkout main
-                git config --global user.email "Jenkins@example.com"
-                git config --global user.name "Jenkis"
-                git pull origin ${GIT_BRANCH##*/}
-                git stash apply
-                git add worker/latest_img_worker
-                git status
-                git commit -m 'Add latest_img_worker from Jenkins Pipeline'
-                git status
-                git push origin ${GIT_BRANCH##*/}
+                ./deploy/terragrunt/scripts/git-push worker/latest_img_worker ${GIT_BRANCH##*/} 'Add latest_img_worker from Jenkins Pipeline'
                 '''
                 
                 build job: 'DeployWorker', wait: false

@@ -9,7 +9,6 @@ echo $patchedVersion > VERSION
 
 
 
-
 # echo $fullVersion | (IFS=. read v1 v2 v3)
 # echo "v: $v1 $v2 $v3"
 # echo "### version before increment: " $fullVersion
