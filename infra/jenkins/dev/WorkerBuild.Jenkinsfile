@@ -29,11 +29,10 @@ pipeline {
         stage('DockerBuild') {
             steps {
                 sh '''
-                echo 'FULL_DOCKER_IMG is :' ${FULL_DOCKER_IMG}
-                DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
+                ./${SCRIPTS_DIR}/increment-version.sh ${WORKER_DIR} ${VERSION_FILE}
                 version=$(cat ${WORKER_DIR}/${VERSION_FILE})
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
-                ./${SCRIPTS_DIR}/increment-version.sh ${WORKER_DIR} ${VERSION_FILE}
+                echo 'FULL_DOCKER_IMG is :' ${FULL_DOCKER_IMG}
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
@@ -42,7 +41,6 @@ pipeline {
             steps {
                 sh '''
                 version=$(cat ${WORKER_DIR}/${VERSION_FILE})
-                DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
                 docker push ${FULL_DOCKER_IMG}
