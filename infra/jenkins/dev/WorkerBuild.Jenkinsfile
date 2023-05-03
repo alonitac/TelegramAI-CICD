@@ -56,9 +56,9 @@ pipeline {
                 echo $FULL_DOCKER_IMG > worker/latest_img_worker
                 git config --global --add safe.directory /var/lib/jenkins/workspace/dev/worker/BuildWorker
                 git config remote.origin.url "https://${GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
-                cat worker/latest_img_worker
+                cat worker/VERSION
                 chmod u+x ./deploy/terragrunt/scripts/git-push.sh
-                ./deploy/terragrunt/scripts/git-push.sh worker/latest_img_worker ${GIT_BRANCH##*/} 'Add latest_img_worker from Jenkins Pipeline'
+                ./deploy/terragrunt/scripts/git-push.sh worker/VERSION ${GIT_BRANCH##*/} 'Add VERSION from Jenkins Pipeline'
                 '''
                 
                 build job: 'DeployWorker', wait: false
