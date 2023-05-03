@@ -6,7 +6,7 @@ module "ec2-instance" {
   key_name                    = "tamir-key"
   monitoring                  = true
   subnet_id                   = element(var.vpc_public_subnets, 0)
-  user_data                   = file("../scripts/jenkins-init.sh")
+  user_data                   = file("${var.scripts_dir}/jenkins-init.sh")
   disable_api_termination     = false
   vpc_security_group_ids      = [
         aws_security_group.aws_ec2_sg.id
@@ -50,6 +50,15 @@ resource "aws_security_group" "aws_ec2_sg" {
     description      = "HTTPS from VPC"
     from_port        = 443
     to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  egress {
+    description      = "SSH from VPC"
+    from_port        = 22
+    to_port          = 22
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]

@@ -20,45 +20,48 @@ pipeline {
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
         GITHUB_TOKEN = credentials('github_access_token')
         DOCKER_IMG = ''
+        SCRIPTS_DIR = "devops/scripts"
+        JENKINS_WS = "/var/lib/jenkins/workspace"
+        WORKER_DIR = "worker"
+        GITHUB_REPO = "https://${env.GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
+        VERSION_FILE = "VERSION"
     }
     stages {
         stage('DockerBuild') {
             steps {
-                echo "Test"
                 sh '''
                 echo 'FULL_DOCKER_IMG is :' ${FULL_DOCKER_IMG}
                 DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
-                ./deploy/terragrunt/scripts/increment-version.sh worker VERSION
+                version=$(cat ${WORKER_DIR}/${VERSION_FILE})
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
+                ./${SCRIPTS_DIR}/increment-version.sh ${WORKER_DIR} ${VERSION_FILE}
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
             }
         }
-        // stage('DockerPush') {
-        //     steps {
-        //         sh '''
-        //         DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
-        //         FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${ImageTag}
-        //         cd ./deploy/terragrunt/eu-west-1/ecr/worker/
-        //         terragrunt init
-        //         terragrunt apply -lock=false -var=repo_name=${DOCKER_IMG} --auto-approve
-        //         aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
-        //         docker push ${FULL_DOCKER_IMG}
-        //         '''
-        //     }
-        // }
+        stage('DockerPush') {
+            steps {
+                sh '''
+                version=$(cat ${WORKER_DIR}/${VERSION_FILE})
+                DOCKER_IMG=${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
+                aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
+                docker push ${FULL_DOCKER_IMG}
+                '''
+            }
+        }
         stage('Trigger- Deploy') {
             steps {
                 sh '''
-                version=$(cat worker/VERSION)
+                version=$(cat ${WORKER_DIR}/${VERSION_FILE})
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
-                echo $FULL_DOCKER_IMG > worker/latest_img_worker
-                git config --global --add safe.directory /var/lib/jenkins/workspace/dev/worker/BuildWorker
-                git config remote.origin.url "https://${GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
-                cat worker/VERSION
-                chmod u+x ./deploy/terragrunt/scripts/git-push.sh
-                ./deploy/terragrunt/scripts/git-push.sh 'worker/VERSION worker/latest_img_worker' ${GIT_BRANCH##*/} '[skip ci] Add VERSION from Jenkins Pipeline'
+                echo $FULL_DOCKER_IMG > ${WORKER_DIR}/latest_img_worker
+                git config --global --add safe.directory ${JENKINS_WS}/dev/worker/BuildWorker
+                git config remote.origin.url "${GITHUB_REPO}"
+                cat ${WORKER_DIR}/${VERSION_FILE}
+                chmod u+x ./${SCRIPTS_DIR}/git-push.sh
+                ./${SCRIPTS_DIR}/git-push.sh '${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker' ${GIT_BRANCH##*/} '[skip ci] updated version from Jenkins Pipeline'
                 '''
                 
                 build job: 'DeployWorker', wait: false

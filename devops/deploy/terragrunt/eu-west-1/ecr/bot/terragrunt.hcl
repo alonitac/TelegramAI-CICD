@@ -13,5 +13,5 @@ inputs = {
 }
 
 locals {
-    path = split("/", path_relative_to_include())
+  path = split("/", path_relative_to_include())
 }
