@@ -1,5 +1,5 @@
 #!/bin/bash
-git stash push $1
+git stash push
 git checkout $2
 git config --global user.email "Jenkins@example.com"
 git config --global user.name "Jenkis"
