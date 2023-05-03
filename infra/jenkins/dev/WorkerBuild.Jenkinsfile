@@ -58,7 +58,7 @@ pipeline {
                 git config remote.origin.url "https://${GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
                 cat worker/VERSION
                 chmod u+x ./deploy/terragrunt/scripts/git-push.sh
-                ./deploy/terragrunt/scripts/git-push.sh worker/VERSION ${GIT_BRANCH##*/} 'Add VERSION from Jenkins Pipeline'
+                ./deploy/terragrunt/scripts/git-push.sh 'worker/VERSION worker/latest_img_worker' ${GIT_BRANCH##*/} 'Add VERSION from Jenkins Pipeline'
                 '''
                 
                 build job: 'DeployWorker', wait: false
