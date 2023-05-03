@@ -23,7 +23,6 @@ pipeline {
         SCRIPTS_DIR = "devops/scripts"
         JENKINS_WS = "/var/lib/jenkins/workspace"
         WORKER_DIR = "worker"
-        GITHUB_REPO = "https://${env.GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
         VERSION_FILE = "VERSION"
     }
     stages {
@@ -58,7 +57,7 @@ pipeline {
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 echo $FULL_DOCKER_IMG > ${WORKER_DIR}/latest_img_worker
                 git config --global --add safe.directory ${JENKINS_WS}/dev/worker/BuildWorker
-                git config remote.origin.url "${GITHUB_REPO}"
+                git config remote.origin.url "https://${env.GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
                 cat ${WORKER_DIR}/${VERSION_FILE}
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
                 ./${SCRIPTS_DIR}/git-push.sh '${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker' ${GIT_BRANCH##*/} '[skip ci] updated version from Jenkins Pipeline'
