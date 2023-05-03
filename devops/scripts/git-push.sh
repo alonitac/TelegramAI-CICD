@@ -1,8 +1,6 @@
 #!/bin/bash
 git config --global user.name "Jenkis"
 git config --global user.email "Jenkins@example.com"
-git config --global --add safe.directory $4
-git config remote.origin.url $5
 git stash push
 git checkout $2
 git pull origin $2 
