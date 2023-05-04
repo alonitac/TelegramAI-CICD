@@ -1,3 +1,5 @@
+def FULL_DOCKER_IMG=""
+
 pipeline {
     agent {
         docker {
@@ -13,7 +15,6 @@ pipeline {
         string(name: 'ImageTag', defaultValue: 'latest')
         string(name: 'ImageName', defaultValue: 'worker')
         string(name: 'DockerFilePath', defaultValue: 'worker/Dockerfile')
-        string(name: 'FULL_DOCKER_IMG' , defaultValue: '')
     }
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
@@ -26,12 +27,18 @@ pipeline {
         VERSION_FILE = "VERSION"
     }
     stages {
+        stage ('setEnvVar')
+        {
+                sh '''
+                version=$(cat ${WORKER_DIR}/${VERSION_FILE})
+                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
+                '''
+        }
         stage('DockerBuild') {
             steps {
                 sh '''
                 ./${SCRIPTS_DIR}/increment-version.sh ${WORKER_DIR} ${VERSION_FILE}
                 version=$(cat ${WORKER_DIR}/${VERSION_FILE})
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo 'FULL_DOCKER_IMG is :' ${FULL_DOCKER_IMG}
                 docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
                 '''
@@ -40,8 +47,6 @@ pipeline {
         stage('DockerPush') {
             steps {
                 sh '''
-                version=$(cat ${WORKER_DIR}/${VERSION_FILE})
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
                 docker push ${FULL_DOCKER_IMG}
                 '''
