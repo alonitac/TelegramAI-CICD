@@ -29,10 +29,9 @@ pipeline {
     stages {
         stage ('setEnvVar')
         {
-                sh '''
-                version=$(cat ${WORKER_DIR}/${VERSION_FILE})
-                FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
-                '''
+                FULL_DOCKER_IMG = sh(script: "FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:test", returnStatus: true)
+
+                echo $FULL_DOCKER_IMG
         }
         stage('DockerBuild') {
             steps {
