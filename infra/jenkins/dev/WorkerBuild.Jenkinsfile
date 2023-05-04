@@ -29,7 +29,7 @@ pipeline {
     stages {
         stage ('setEnvVar')
         {
-                FULL_DOCKER_IMG = sh(script: "FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:test", returnStatus: true)
+                FULL_DOCKER_IMG = sh(script: "FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH}/${ImageName}:test", returnStatus: true)
 
                 echo $FULL_DOCKER_IMG
         }
