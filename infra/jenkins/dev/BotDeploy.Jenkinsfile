@@ -18,7 +18,7 @@ pipeline {
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
-                    full_image=$(cat bot/latest_img)
+                    full_image=$(cat bot/latest_img_bot)
                     echo "image_name: " ${full_image}  
                     '''
                 }
