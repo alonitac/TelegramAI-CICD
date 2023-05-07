@@ -24,6 +24,7 @@ pipeline {
         JENKINS_WS = "/var/lib/jenkins/workspace"
         WORKER_DIR = "worker"
         VERSION_FILE = "VERSION"
+        INTERNAL_WS = "/var/lib/jenkins/workspace/dev/worker/BuildWorker"
     }
     stages {
         stage('DockerBuild') {
@@ -55,7 +56,7 @@ pipeline {
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 echo $FULL_DOCKER_IMG > "${WORKER_DIR}/latest_img_worker"
-                git config --global --add safe.directory /var/lib/jenkins/workspace/dev/worker/BuildWorker
+                git config --global --add safe.directory ${INTERNAL_WS}
                 git config remote.origin.url "https://${GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
                 cat "${WORKER_DIR}/${VERSION_FILE}"
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
