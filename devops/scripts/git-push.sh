@@ -1,7 +1,4 @@
 #!/bin/bash
-
-set -e
-
 git config --global user.name "Jenkis"
 git config --global user.email "Jenkins@example.com"
 echo "Running git stash push"
