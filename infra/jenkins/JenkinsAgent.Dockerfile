@@ -13,7 +13,6 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
 RUN chmod u+x ./kubectl
 RUN mv ./kubectl /usr/local/bin
 
-
 RUN curl https://releases.hashicorp.com/terraform/1.4.5/terraform_1.4.5_linux_amd64.zip -o terraform_1.4.5_linux_amd64.zip \
   && unzip terraform_1.4.5_linux_amd64.zip \
   && mv terraform /usr/bin \
