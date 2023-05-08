@@ -24,7 +24,7 @@ pipeline {
                     sh '''
                     worker_image_name=$(cat worker/latest_img_worker)
                     echo "worker_image_name: ${worker_image_name}"
-                    yq -i ".spec.template.spec.containers[0].image = ${worker_image_name}" infra/k8s/bot.yaml
+                    worker_img=${worker_image_name} yq -i '.spec.template.spec.containers[0].image = env(worker_img)' infra/k8s/bot.yaml
                     k8s_yaml=$(cat infra/k8s/bot.yaml)
                     echo "k8s_yaml: " ${k8s_yaml}
                     '''
