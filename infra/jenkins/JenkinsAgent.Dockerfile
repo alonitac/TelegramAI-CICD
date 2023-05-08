@@ -19,10 +19,9 @@ RUN curl https://releases.hashicorp.com/terraform/1.4.5/terraform_1.4.5_linux_am
   && mv terraform /usr/local/bin \
   && rm terraform_1.4.5_linux_amd64.zip
 
-RUN curl https://github.com/mikefarah/yq/releases/download/v4.27.5/yq_linux_amd64 -o yq_linux_amd64 \
-  && mv yq_linux_amd64 /usr/local/bin/yq \
-  && chmod u+x /usr/local/bin/yq
 
+RUN curl -sS -L https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_arm64 -o /usr/local/bin/yq \
+  && chmod +x /usr/local/bin/yq
 
 FROM jenkins/agent
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/

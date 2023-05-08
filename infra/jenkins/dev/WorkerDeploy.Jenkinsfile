@@ -23,7 +23,9 @@ pipeline {
                 ]) {
                     sh '''
                     worker_image_name=$(cat worker/latest_img_worker)
-                    echo "worker_image_name: ${worker_image_name}"  
+                    echo "worker_image_name: ${worker_image_name}"
+                    yq -i '.spec.template.spec.containers[0].image = "${worker_image_name}"' ./infra/k0s/bot.yaml
+                    echo infra/k0s/bot.yaml
                     '''
                 }
             }
