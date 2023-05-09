@@ -43,7 +43,6 @@ pipeline {
                 sh '''
                 version=$(cat ${BOT_DIR}/${VERSION_FILE})
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
-                yq
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
                 docker push ${FULL_DOCKER_IMG}
                 '''
