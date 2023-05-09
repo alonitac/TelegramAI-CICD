@@ -4,8 +4,8 @@ module "ec2-instance" {
   ami                         = "ami-022daa15b37b5e55d"
   instance_type               = "t2.medium"
   key_name                    = "tamir-key"
-  subnet_id                   = element(var.vpc_private_subnets, 0)
-  user_data                   = file("/Users/tamirnator/Desktop/DevopsCourse/TelegramAI-CICD/deploy/terragrunt/scripts/k0s-init.sh")
+  subnet_id                   = element(var.vpc_public_subnets, 0)
+  user_data                   = file("${var.scripts_dir}/jenkins-init.sh")
   disable_api_termination = true
   vpc_security_group_ids = [
     aws_security_group.aws_ec2_sg.id
@@ -33,35 +33,9 @@ resource "aws_eip" "k0s" {
 
 resource "aws_security_group" "aws_ec2_sg" {
   name        = "tamir-k0s-sg-tf"
-  description = "Allow traffic to K0S server"
+  description = "Allow traffic to K0s server"
   vpc_id      = var.vpc_id
 
-  egress {
-    description      = "HTTP from VPC"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  egress {
-    description      = "HTTPS from VPC"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  egress {
-    description      = "ICMP from VPC"
-    from_port        = "8"
-    to_port          = "0"
-    protocol         = "icmp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
   ingress {
     description      = "ICMP to VPC"
     from_port        = "8"

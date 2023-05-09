@@ -27,7 +27,8 @@ pipeline {
                     worker_img=${worker_image_name} yq -i '.spec.template.spec.containers[0].image=env(worker_img)' infra/k8s/bot.yaml
                     k8s_yaml=$(cat infra/k8s/bot.yaml)
                     echo "k8s_yaml: " ${k8s_yaml}
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
+                    kubectl delete --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/worker.yaml --namespace dev
                     '''
                 }
             }
