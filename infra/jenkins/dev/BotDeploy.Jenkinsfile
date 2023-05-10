@@ -18,8 +18,9 @@ pipeline {
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
-                    full_image=$(cat bot/latest_img_bot)
-                    echo "image_name: " ${full_image}  
+                    k8s_yaml=$(cat infra/k8s/bot.yaml)
+                    echo "k8s_yaml: " ${k8s_yaml}
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
                     '''
                 }
             }
