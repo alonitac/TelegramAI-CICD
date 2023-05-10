@@ -58,6 +58,9 @@ pipeline {
                 git config --global --add safe.directory ${INTERNAL_WS}
                 git config remote.origin.url "https://${GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
                 cat "${WORKER_DIR}/${VERSION_FILE}"
+                worker_image_name=$(cat worker/latest_img_worker)
+                echo "worker_image_name: ${worker_image_name}"
+                worker_img=${worker_image_name} yq -i '.spec.template.spec.containers[0].image=env(worker_img)' infra/k8s/bot.yaml
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
                 ./${SCRIPTS_DIR}/git-push.sh "${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker" ${GIT_BRANCH##*/} '[skip ci] updated version from Jenkins Pipeline'
                 '''
@@ -66,9 +69,7 @@ pipeline {
                 
             }
         }
-    // TODO dev worker build stages here
      }
-
     post {
         // always {
         //     cleanWs(cleanWhenNotBuilt: false,
@@ -82,10 +83,6 @@ pipeline {
         success {
             echo 'I succeeded!'
             echo 'Cleaning workspace... '
-           // deleteDir() /* clean up our workspace */
-            // sh '''
-            // echo "sudo su - ec2-user find / -type f -name .terragrunt-cache -delete" 
-            // '''
         }
         unstable {
             echo 'I am unstable :/'
@@ -95,9 +92,6 @@ pipeline {
         }
         changed {
             echo 'Things were different before...'
-        }
-        
-        }  
-    // TODO dev worker build stages here
-    
+        }    
+    }
 }

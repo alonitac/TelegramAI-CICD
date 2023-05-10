@@ -22,12 +22,8 @@ pipeline {
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
-                    worker_image_name=$(cat worker/latest_img_worker)
-                    echo "worker_image_name: ${worker_image_name}"
-                    worker_img=${worker_image_name} yq -i '.spec.template.spec.containers[0].image=env(worker_img)' infra/k8s/bot.yaml
                     k8s_yaml=$(cat infra/k8s/bot.yaml)
                     echo "k8s_yaml: " ${k8s_yaml}
-                    kubectl delete --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
                     kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/worker.yaml --namespace dev
                     '''
                 }
@@ -35,6 +31,3 @@ pipeline {
         }
     }
 }
-// # apply the configurations to k8s cluster
-// ####testingggg
-// kubectl apply --kubeconfig ${KUBECONFIG} -f <path-to-bot-yaml-k8s-manifest>
