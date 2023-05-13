@@ -34,7 +34,7 @@ pipeline {
                 version=$(cat ${BOT_DIR}/${VERSION_FILE})
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo 'FULL_DOCKER_IMG is :' ${FULL_DOCKER_IMG}
-                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
+                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} . --build-arg ENV="dev"
                 '''
             }
         }
