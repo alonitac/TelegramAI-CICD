@@ -1,6 +1,6 @@
 {
   "aws_region": "eu-west-1",
   "bot_to_worker_queue_name": "tamir-queue-tf",
-  "telegram_token_secret_name": "TamirTelegramTokenDev",
+  "telegram_token_secret_name": "telegramTokenDev",
   "videos_bucket": "tamir-s3-eu-west-1"
 }
