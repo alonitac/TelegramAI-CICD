@@ -15,12 +15,6 @@ pipeline {
      
     stages {
         stage('Linting test') {
-            agent {
-                docker {
-                    image 'python:3.9.16-slim-buster'
-                    reuseNode true
-                }
-            }
             steps {
               sh '''
                   pip3 install pylint
