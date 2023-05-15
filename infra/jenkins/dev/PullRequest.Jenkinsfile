@@ -12,7 +12,7 @@ pipeline {
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
         GITHUB_TOKEN = credentials('github_access_token')
     }
-    
+     
     stages {
         stage('Linting test') {
             agent {
