@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-cm
+  namespace: prod
+data:
+  ENV: 'prod'

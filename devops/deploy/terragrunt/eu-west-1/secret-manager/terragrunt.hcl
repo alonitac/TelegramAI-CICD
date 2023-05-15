@@ -7,7 +7,7 @@ locals {
 }
 
 terraform {
-  source = "${find_in_parent_folders()}/../../modules//ssm"
+  source = "${find_in_parent_folders()}/../../modules//secret-manager"
 }
 
 inputs = {
