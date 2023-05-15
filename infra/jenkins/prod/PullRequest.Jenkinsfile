@@ -22,7 +22,7 @@ pipeline {
                 '''
             }
 
-            // Make sure the "Warnings Next Generation" plugin is installed!!
+            // Make sure the "Warnings Next Generation" plugin is installed !!
             post {
               always {
                 sh 'cat pylint.log'
