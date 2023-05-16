@@ -23,7 +23,7 @@ pipeline {
             }
             steps {
               sh '''
-                  pip3 instal pylint
+                  pip3 install pylint
                   python3 -m pylint -f parseable --reports=no **/*.py > pylint.log
                 '''
             }
