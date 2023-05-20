@@ -23,6 +23,12 @@ RUN curl https://releases.hashicorp.com/terraform/1.4.5/terraform_1.4.5_linux_am
 RUN curl -sS -L https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64 -o /usr/local/bin/yq \
   && chmod +x /usr/local/bin/yq
 
+RUN curl https://get.helm.sh/helm-v3.12.0-linux-amd64.tar.gz -o /usr/local/bin/helm-v3.11.0-linux-amd64.tar.gz \
+    && yum install -y gzip \
+    && yum install -y tar \
+    && tar xfz /usr/local/bin/helm-v3.11.0-linux-amd64.tar.gz \
+    && mv linux-amd64/helm /usr/local/bin/
+
 FROM jenkins/agent
 COPY --from=docker /usr/local/bin/docker /usr/local/bin/
 COPY --from=installer /usr/local/aws-cli/ /usr/local/aws-cli/
@@ -31,4 +37,5 @@ COPY --from=installer /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=installer /usr/local/bin/terraform /usr/local/bin/terraform
 COPY --from=installer /usr/local/bin/terragrunt /usr/local/bin/
 COPY --from=installer /usr/local/bin/yq /usr/local/bin/
+COPY --from=installer /usr/local/bin/helm /usr/local/bin/
 
