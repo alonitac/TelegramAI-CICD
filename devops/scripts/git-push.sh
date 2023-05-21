@@ -2,6 +2,7 @@
 set -e
 git config --global user.name "Jenkis"
 git config --global user.email "Jenkins@example.com"
+git config --global pull.rebase false
 echo "Running git stash push"
 git stash push
 echo "Running git checkout $2"
