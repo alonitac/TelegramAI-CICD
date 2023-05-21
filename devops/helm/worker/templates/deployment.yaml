@@ -38,6 +38,12 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          env:
+            - name: ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.ENV }} env-cm
+                  key: ENV
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
