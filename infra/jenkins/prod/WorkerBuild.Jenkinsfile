@@ -24,7 +24,7 @@ pipeline {
         JENKINS_WS = "/var/lib/jenkins/workspace"
         WORKER_DIR = "worker"
         VERSION_FILE = "VERSION"
-        INTERNAL_WS = "/var/lib/jenkins/workspace/prod/worker/BuildWorker"
+        INTERNAL_WS = "/var/lib/jenkins/workspace/prod/worker/buildworker"
     }
     stages {
         stage('DockerBuild') {
