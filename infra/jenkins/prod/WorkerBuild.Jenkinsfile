@@ -65,13 +65,16 @@ pipeline {
                 ./${SCRIPTS_DIR}/git-push.sh "${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker" ${GIT_BRANCH##*/} '[skip ci] updated version from Jenkins Pipeline'
                 '''
                 
-                build job: 'deployworker', wait: false
+                
                 
             }
         }
      }
     post {
-        // always {
+        always {
+            sh ''''
+            rm -rf /var/lib/jenkins/workspace/prod/worker/buildworker/
+            '''
         //     cleanWs(cleanWhenNotBuilt: false,
         //     deleteDirs: true,
         //     disableDeferredWipeout: true,
@@ -79,10 +82,11 @@ pipeline {
         //     patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
         //                        [pattern: '.propsfile', type: 'EXCLUDE']])
 
-        // }
+        }
         success {
             echo 'I succeeded!'
-            echo 'Cleaning workspace... '
+            echo 'Starting Bot Deployment to prod ...'
+            build job: 'deployworker', wait: false
         }
         unstable {
             echo 'I am unstable :/'
