@@ -23,6 +23,7 @@ pipeline {
                     kubectl delete --kubeconfig ${KUBECONFIG} -f infra/k8s/env-cm.yaml --namespace dev
                     kubectl delete --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev                
                     '''
+                    
                 }
             }
         }
