@@ -20,8 +20,8 @@ pipeline {
                     sh '''
                     k8s_yaml=$(cat infra/k8s/bot.yaml)
                     echo "k8s_yaml: " ${k8s_yaml}
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/env-cm-prod.yaml --namespace dev
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/env-cm-prod.yaml --namespace prod
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace prod
                     '''
                 }
             }
