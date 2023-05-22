@@ -82,7 +82,7 @@ pipeline {
 
         // }
         success {
-            echo 'I succeeded!'
+            echo 'I succeeded!!!'
             echo 'Cleaning workspace...'
            // deleteDir() /* clean up our workspace */
             // sh '''
@@ -93,7 +93,7 @@ pipeline {
             echo 'I am unstable :/'
         }
         failure {
-            echo 'I failed :( '
+            echo 'I failed :('
         }
         changed {
             echo 'Things were different before... '
