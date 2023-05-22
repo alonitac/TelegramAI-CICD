@@ -22,7 +22,6 @@ pipeline {
                     echo "k8s_yaml: " ${k8s_yaml}
                     kubectl delete --kubeconfig ${KUBECONFIG} -f infra/k8s/env-cm.yaml --namespace dev
                     kubectl delete --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
-                    
                     '''
                 }
             }
