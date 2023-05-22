@@ -66,7 +66,7 @@ pipeline {
                 ./${SCRIPTS_DIR}/git-push.sh "${BOT_DIR}/${VERSION_FILE} ${BOT_DIR}/latest_img_bot infra/k8s/bot.yaml" ${GIT_BRANCH##*/} '[skip ci] updated version from Jenkins Pipeline'
                 '''
                 
-                build job: 'DeployBot', wait: false
+                build job: 'deploybot', wait: false
                 
             }
         }

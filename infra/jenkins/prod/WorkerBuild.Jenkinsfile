@@ -65,7 +65,7 @@ pipeline {
                 ./${SCRIPTS_DIR}/git-push.sh "${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker" ${GIT_BRANCH##*/} '[skip ci] updated version from Jenkins Pipeline'
                 '''
                 
-                build job: 'DeployWorker', wait: false
+                build job: 'deployworker', wait: false
                 
             }
         }
