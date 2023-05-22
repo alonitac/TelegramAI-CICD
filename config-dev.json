@@ -1,6 +1,6 @@
 {
-  "aws_region": "<app-aws-region>",
-  "bot_to_worker_queue_name": "<your-sqs-queue-name>",
-  "telegram_token_secret_name": "<your-telegram-token-name>",
-  "videos_bucket": "<your-s3-bucket-name>"
+  "aws_region": "eu-north-1",
+  "bot_to_worker_queue_name": "ao-sqs",
+  "telegram_token_secret_name": "ao-telegramToken",
+  "videos_bucket": "ao-bt"
 }
