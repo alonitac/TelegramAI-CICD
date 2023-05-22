@@ -92,6 +92,7 @@ pipeline {
                 }
             }
         }
+        }
         success {
             echo 'I succeeded!'
             echo 'Cleaning workspace... '
