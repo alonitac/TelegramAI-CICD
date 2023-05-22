@@ -90,7 +90,7 @@ pipeline {
             // '''
         }
         unstable {
-            echo 'I am unstable :/'
+            echo 'I am unstable :/ '
         }
         failure {
             echo 'I failed :('
