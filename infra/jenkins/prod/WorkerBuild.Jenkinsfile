@@ -90,6 +90,7 @@ pipeline {
                     type('INCLUDE')
                     pattern('.gitignore')
                 }
+            }
         }
         success {
             echo 'I succeeded!'
@@ -103,6 +104,7 @@ pipeline {
         }
         changed {
             echo 'Things were different before... '
-        }    
+        }  
+          
     }
 }
