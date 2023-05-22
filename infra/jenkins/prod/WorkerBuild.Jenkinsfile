@@ -64,7 +64,9 @@ pipeline {
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
                 ./${SCRIPTS_DIR}/git-push.sh "${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker" ${GIT_BRANCH##*/} '[skip ci] updated version from Jenkins Pipeline'
                 '''
-            build job: 'deployworker', wait: false 
+                
+                build job: 'deployworker', wait: false
+                
             }
         }
      }
@@ -88,12 +90,10 @@ pipeline {
                     type('INCLUDE')
                     pattern('.gitignore')
                 }
-            }  
         }
-
         success {
             echo 'I succeeded!'
-
+            echo 'Cleaning workspace... '
         }
         unstable {
             echo 'I am unstable :/'
