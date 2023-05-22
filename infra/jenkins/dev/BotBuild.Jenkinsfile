@@ -51,7 +51,6 @@ pipeline {
         stage('Trigger- Deploy') {
             steps {
                 sh '''
-                echo "test"
                 version=$(cat ${BOT_DIR}/${VERSION_FILE})
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
@@ -65,9 +64,7 @@ pipeline {
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
                 ./${SCRIPTS_DIR}/git-push.sh "${BOT_DIR}/${VERSION_FILE} ${BOT_DIR}/latest_img_bot infra/k8s/bot.yaml" ${GIT_BRANCH##*/} '[skip ci] updated version from Jenkins Pipeline'
                 '''
-                
                 build job: 'DeployBot', wait: false
-                
             }
         }
      }
