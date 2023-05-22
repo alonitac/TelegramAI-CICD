@@ -21,5 +21,7 @@ echo "git commit -m $3"
 git commit -m "$3"
 echo "git status"
 git status
+echo "Running git pull $2"
+git pull
 echo "git push origin $2"
 git push origin $2
