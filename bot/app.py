@@ -93,7 +93,7 @@ def get_telegram_token_secret():
 
 if __name__ == '__main__':
     env = os.environ['ENV']
-    with ope(f'config-{env}.json') as f:
+    with open(f'config-{env}.json') as f:
         config = json.load(f)
 
     sqs = boto3.resource('sqs', region_name=config.get('aws_region'))
