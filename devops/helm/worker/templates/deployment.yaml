@@ -42,7 +42,7 @@ spec:
             - name: ENV
               valueFrom:
                 configMapKeyRef:
-                  name: {{ .Values.ENV }} env-cm
+                  name: {{ .Values.ENV }}
                   key: ENV
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
