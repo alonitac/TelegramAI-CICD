@@ -72,15 +72,12 @@ pipeline {
      }
     post {
         always {
-            sh ''''
-            rm -rf /var/lib/jenkins/workspace/prod/worker/buildworker/
-            '''
-        //     cleanWs(cleanWhenNotBuilt: false,
-        //     deleteDirs: true,
-        //     disableDeferredWipeout: true,
-        //     notFailBuild: true,
-        //     patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
-        //                        [pattern: '.propsfile', type: 'EXCLUDE']])
+            cleanWs(cleanWhenNotBuilt: false,
+            deleteDirs: true,
+            disableDeferredWipeout: true,
+            notFailBuild: true,
+            patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+                               [pattern: '.propsfile', type: 'EXCLUDE']])
 
         }
         success {
