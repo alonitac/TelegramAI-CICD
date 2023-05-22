@@ -22,8 +22,10 @@ pipeline {
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
-                    WORKER_IMAGE_NAME = $(cat worker/latest_img_worker)
-                    echo "WORKER-image_name: " ${WORKER_IMAGE_NAME}  
+                    k8s_yaml=$(cat infra/k8s/bot.yaml)
+                    echo "k8s_yaml: " ${k8s_yaml}
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/env-cm.yaml --namespace dev
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/bot.yaml --namespace dev
                     '''
                 }
             }
