@@ -22,7 +22,7 @@ pipeline {
                     file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
-                    WORKER_IMAGE_NAME = $(cat worker/latest_img_WORKER)
+                    WORKER_IMAGE_NAME = $(cat worker/latest_img_worker)
                     echo "WORKER-image_name: " ${WORKER_IMAGE_NAME}  
                     '''
                 }
