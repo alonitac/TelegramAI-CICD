@@ -90,10 +90,10 @@ pipeline {
             // '''
         }
         unstable {
-            echo 'I am unstable :/ '
+            echo 'I am unstable :/'
         }
         failure {
-            echo 'I failed :('
+            echo 'I failed :( '
         }
         changed {
             echo 'Things were different before...'
