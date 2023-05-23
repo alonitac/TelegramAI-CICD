@@ -80,7 +80,7 @@ pipeline {
                     patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
                                [pattern: '.propsfile', type: 'EXCLUDE']])
 				}
-        }
+        
         success {
             echo 'I succeeded!'
             echo 'Cleaning workspace...'
