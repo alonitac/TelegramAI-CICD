@@ -73,7 +73,7 @@ pipeline {
      }
     post {
          always {
-            cleanWs() { // Clean after build
+            cleanWs( // Clean after build
             cleanWhenAborted(true)
             cleanWhenFailure(true)
             cleanWhenNotBuilt(false)
@@ -91,7 +91,7 @@ pipeline {
                     type('INCLUDE')
                     pattern('.gitignore')
                 }  
-				}
+            )
 				}
         }
         success {
