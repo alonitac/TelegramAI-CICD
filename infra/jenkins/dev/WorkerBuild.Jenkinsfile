@@ -63,7 +63,7 @@ pipeline {
                 worker_img=${worker_image_name} yq -i '.spec.template.spec.containers[0].image=env(worker_img)' infra/k8s/worker.yaml
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
                 ./${SCRIPTS_DIR}/git-push.sh "${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker infra/k8s/worker.yaml"  \
-                     ${GIT_BRANCH##*/} '[skip ci] updated version from Jenkins Pipeline'
+                     ${GIT_BRANCH##*/} '[ci skip] updated version from Jenkins Pipeline'
                 '''
                 
                 build job: 'DeployWorker', wait: false
