@@ -63,7 +63,7 @@ pipeline {
                 bot_img=${bot_image_name} yq -i '.spec.template.spec.containers[0].image=env(bot_img)' infra/k8s/bot.yaml
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
                 ./${SCRIPTS_DIR}/git-push.sh "${BOT_DIR}/${VERSION_FILE} ${BOT_DIR}/latest_img_bot infra/k8s/bot.yaml" ${GIT_BRANCH##*/} \
-                    '[ci-skip] updated version from Jenkins Pipeline'
+                    '[ci skip] updated version from Jenkins Pipeline'
                 '''
                 build job: 'DeployBot', wait: false
             }
