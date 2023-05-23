@@ -27,7 +27,7 @@ do
     git status
     echo "git push origin $2"
     git push origin $2 || push_success=1
-    if [[ $push_success == "1" ]]; then
+    if [[ $push_success == 1 ]]; then
         break
     else
         echo "### running git reset ###"
