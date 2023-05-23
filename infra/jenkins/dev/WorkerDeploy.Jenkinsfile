@@ -24,7 +24,7 @@ pipeline {
                     sh '''
                     k8s_yaml=$(cat infra/k8s/bot.yaml)
                     echo "k8s_yaml: " ${k8s_yaml}
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/worker.yaml --namespace dev
+                    kubectl delete --kubeconfig ${KUBECONFIG} -f infra/k8s/worker.yaml --namespace dev
                     helm upgrade test-worker ./devops/helm/worker
                     '''
                 }
