@@ -82,8 +82,8 @@ pipeline {
 
         // }
         success {
-            echo 'I succeeded!'
-            echo 'Cleaning workspace... '
+            echo 'I succeeded!!!'
+            echo 'Cleaning workspace...'
            // deleteDir() /* clean up our workspace */
             // sh '''
             // echo "sudo su - ec2-user find / -type f -name .terragrunt-cache -delete" 
@@ -96,7 +96,7 @@ pipeline {
             echo 'I failed :('
         }
         changed {
-            echo 'Things were different before...'
+            echo 'Things were different before... '
         }
     }
 }
