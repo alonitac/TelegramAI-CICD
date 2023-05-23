@@ -21,7 +21,8 @@ pipeline {
                     k8s_yaml=$(cat infra/k8s/bot.yaml)
                     echo "k8s_yaml: " ${k8s_yaml}
                     kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/env-cm-dev.yaml --namespace dev
-                    helm upgrade test-bot ./devops/helm/bot || helm install test-bot ./devops/helm/bot
+                    helm uninstall test-bot ./devops/helm/bot
+                    helm upgrade bot ./devops/helm/bot || helm install bot ./devops/helm/bot
                     '''
                 }
             }
