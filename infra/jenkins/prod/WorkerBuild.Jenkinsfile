@@ -72,28 +72,28 @@ pipeline {
         }
      }
     post {
-        //  always {
-        //         cleanWs { // Clean after build
-        //     cleanWhenAborted(true)
-        //     cleanWhenFailure(true)
-        //     cleanWhenNotBuilt(false)
-        //     cleanWhenSuccess(true)
-        //     cleanWhenUnstable(true)
-        //     deleteDirs(true)
-        //     notFailBuild(true)
-        //     disableDeferredWipeout(true)
-        //     patterns {
-        //         pattern {
-        //             type('EXCLUDE')
-        //             pattern('.propsfile')
-        //         }
-        //         pattern {
-        //             type('INCLUDE')
-        //             pattern('.gitignore')
-        //         }  
-		// 		}
-		// 		}
-        //  }
+         always {
+                cleanWs { // Clean after build
+            cleanWhenAborted(true)
+            cleanWhenFailure(true)
+            cleanWhenNotBuilt(false)
+            cleanWhenSuccess(true)
+            cleanWhenUnstable(true)
+            deleteDirs(true)
+            notFailBuild(true)
+            disableDeferredWipeout(true)
+            patterns {
+                pattern {
+                    type('EXCLUDE')
+                    pattern('.propsfile')
+                }
+                pattern {
+                    type('INCLUDE')
+                    pattern('.gitignore')
+                }  
+				}
+				}
+         }
         success {
             echo 'I succeeded!'
             echo 'Cleaning workspace...'
