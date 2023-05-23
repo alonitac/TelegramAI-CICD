@@ -73,7 +73,7 @@ pipeline {
      }
     post {
          always {
-                cleanWs { // Clean after build
+            cleanWs { // Clean after build
             cleanWhenAborted(true)
             cleanWhenFailure(true)
             cleanWhenNotBuilt(false)
@@ -82,6 +82,7 @@ pipeline {
             deleteDirs(true)
             notFailBuild(true)
             disableDeferredWipeout(true)
+            }
             patterns {
                 pattern {
                     type('EXCLUDE')
