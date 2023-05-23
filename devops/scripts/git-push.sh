@@ -6,7 +6,7 @@ git config --global pull.rebase false
 
 while true
 do
-    push_success=0
+    push_success=1
     echo "Running git stash push"
     git stash push
     echo "Running git checkout $2"
@@ -26,7 +26,7 @@ do
     echo "git status"
     git status
     echo "git push origin $2"
-    git push origin $2 || push_success=1
+    git push origin $2 || push_success=0
     if [[ $push_success == 1 ]]; then
         break
     else
