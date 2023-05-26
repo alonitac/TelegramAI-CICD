@@ -12,21 +12,17 @@ pipeline {
         APP_ENV = "dev"
     }
 
-    parameters {
-        string(name: 'worker_image_name')
-    }
-
     stages {
-        stage('Worker Deploy') {
+        stage('Bot Deploy') {
             steps {
                 withCredentials([
-                    file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')
+                    file(credentialsId: 'EKSkubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
                     k8s_yaml=$(cat infra/k8s/bot.yaml)
                     echo "k8s_yaml: " ${k8s_yaml}
-                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/env-cm-dev.yaml --namespace dev
-                    helm upgrade worker ./devops/helm/worker -n dev || helm install worker ./devops/helm/worker -n dev
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/env-cm-${APP_ENV}.yaml -n ${APP_ENV}
+                    helm upgrade bot ./devops/helm/bot -n ${APP_ENV} || helm install bot ./devops/helm/bot -n ${APP_ENV}
                     '''
                 }
             }
