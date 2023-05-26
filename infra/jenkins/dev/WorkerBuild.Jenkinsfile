@@ -1,8 +1,6 @@
 pipeline {
     agent {
         docker {
-            // TODO build & push your Jenkins agent image, place the URL here 
-            alwaysPull true
             image '700935310038.dkr.ecr.eu-west-1.amazonaws.com/tamir/jenkins/agent:1.4'
             args  '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
