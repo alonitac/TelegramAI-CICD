@@ -27,6 +27,7 @@ pipeline {
                     aws sts get-caller-identity
                     ls
                     pwd
+                    find / -name '.kube'
                     cat /home/ec2-user/.kube/config
                     kubectl get ns
                     kubectl apply --kubeconfig ~/.kube/config -f infra/k8s/env-cm-${APP_ENV}.yaml -n ${APP_ENV}
