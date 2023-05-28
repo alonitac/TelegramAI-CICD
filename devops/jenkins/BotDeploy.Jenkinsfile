@@ -13,7 +13,6 @@ pipeline {
     stages {
         stage('Bot Deploy') {
             steps {
-                {
                     sh '''
                     k8s_yaml=$(cat infra/k8s/bot.yaml)
                     echo "k8s_yaml: " ${k8s_yaml}
@@ -23,7 +22,6 @@ pipeline {
                     kubectl apply -f infra/k8s/env-cm-${APP_ENV}.yaml -n ${APP_ENV}
                     helm upgrade bot ./devops/helm/bot -n ${APP_ENV} || helm install bot ./devops/helm/bot -n ${APP_ENV}
                     '''
-                }
             }
         }
     }
