@@ -27,7 +27,7 @@ pipeline {
                     aws sts get-caller-identity
                     ls
                     pwd
-                    cat ~/.kube/config
+                    cat /home/ec2-user/.kube/config
                     kubectl get ns
                     kubectl apply --kubeconfig ~/.kube/config -f infra/k8s/env-cm-${APP_ENV}.yaml -n ${APP_ENV}
                     helm upgrade bot ./devops/helm/bot -n ${APP_ENV} || helm install bot ./devops/helm/bot -n ${APP_ENV}
