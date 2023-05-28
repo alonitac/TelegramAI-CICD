@@ -61,7 +61,7 @@ pipeline {
                 bot_image_name=$(cat bot/latest_img_bot)
                 echo "bot_image_name: ${bot_image_name}"
                 bot_img=${bot_image_name} yq -i '.spec.template.spec.containers[0].image=env(bot_img)' infra/k8s/bot.yaml
-                bot_img=${bot_image_name} yq -i '.appVersion=env(bot_img)' devops/helm/worker/Chart.yaml
+                bot_version=${version} yq -i '.appVersion=env(bot_version)' devops/helm/worker/Chart.yaml
                 cat devops/helm/worker/Chart.yaml
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
                 ./${SCRIPTS_DIR}/git-push.sh "${BOT_DIR}/${VERSION_FILE} ${BOT_DIR}/latest_img_bot infra/k8s/bot.yaml devops/helm/bot/Chart.yaml" \
