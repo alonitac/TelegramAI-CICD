@@ -52,6 +52,7 @@ pipeline {
                 scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 sh '''
                 version=$(cat ${BOT_DIR}/${VERSION_FILE})
+                DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 echo $FULL_DOCKER_IMG > "${BOT_DIR}/latest_img_bot"
@@ -62,6 +63,7 @@ pipeline {
                 echo "bot_image_name: ${bot_image_name}"
                 bot_img=${bot_image_name} yq -i '.spec.template.spec.containers[0].image=env(bot_img)' infra/k8s/bot.yaml
                 bot_version=${version} yq -i '.appVersion=env(bot_version)' devops/helm/bot/Chart.yaml
+                docker_img=${DOCKER_IMG} yq -i '.image.repository=env(docker_img)' devops/helm/bot/values.yaml
                 cat devops/helm/bot/Chart.yaml
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
                 ./${SCRIPTS_DIR}/git-push.sh "${BOT_DIR}/${VERSION_FILE} ${BOT_DIR}/latest_img_bot infra/k8s/bot.yaml devops/helm/bot/Chart.yaml" \
