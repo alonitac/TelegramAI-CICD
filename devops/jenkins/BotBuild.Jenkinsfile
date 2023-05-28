@@ -64,7 +64,7 @@ pipeline {
                 bot_img=${bot_image_name} yq -i '.appVersion=env(bot_img)' devops/helm/worker/Chart.yaml
                 cat devops/helm/worker/Chart.yaml
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
-                ./${SCRIPTS_DIR}/git-push.sh "${BOT_DIR}/${VERSION_FILE} ${BOT_DIR}/latest_img_bot infra/k8s/bot.yaml devops/helm/worker/Chart.yaml" \
+                ./${SCRIPTS_DIR}/git-push.sh "${BOT_DIR}/${VERSION_FILE} ${BOT_DIR}/latest_img_bot infra/k8s/bot.yaml devops/helm/bot/Chart.yaml" \
                     ${GIT_BRANCH##*/} '[ci skip] updated version from Jenkins Pipeline'
                 '''
                 // build job: 'DeployBot', wait: false
