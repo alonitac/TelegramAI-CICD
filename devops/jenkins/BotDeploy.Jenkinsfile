@@ -13,9 +13,7 @@ pipeline {
     stages {
         stage('Bot Deploy') {
             steps {
-                withCredentials([
-                    file(credentialsId: 'EKSkubeconfig', variable: 'KUBECONFIG')
-                ]) {
+                {
                     sh '''
                     k8s_yaml=$(cat infra/k8s/bot.yaml)
                     echo "k8s_yaml: " ${k8s_yaml}
