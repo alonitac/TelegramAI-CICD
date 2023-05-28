@@ -19,6 +19,7 @@ pipeline {
                     file(credentialsId: 'EKSkubeconfig', variable: 'KUBECONFIG')
                 ]) {
                     sh '''
+                    echo ${AWS_ACCESS_KEY}
                     k8s_yaml=$(cat infra/k8s/bot.yaml)
                     echo "k8s_yaml: " ${k8s_yaml}
                     aws sts get-caller-identity
