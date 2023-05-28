@@ -7,8 +7,6 @@ pipeline {
     }
 
     environment {
-        AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
-        AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
         APP_ENV = "dev"
     }
 
