@@ -25,12 +25,8 @@ pipeline {
                     aws eks list-clusters
                     aws eks update-kubeconfig --region eu-west-1 --name tamir-eks-test --role-arn arn:aws:iam::700935310038:role/tamir-eks-test-cluster-20230526102719380800000005
                     aws sts get-caller-identity
-                    ls
-                    pwd
-                    find . -name '.kube'
-                    cat /home/ec2-user/.kube/config
+                    kubectl apply --kubeconfig ${KUBECONFIG} -f infra/k8s/env-cm-${APP_ENV}.yaml -n ${APP_ENV}
                     kubectl get ns
-                    kubectl apply --kubeconfig ~/.kube/config -f infra/k8s/env-cm-${APP_ENV}.yaml -n ${APP_ENV}
                     helm upgrade bot ./devops/helm/bot -n ${APP_ENV} || helm install bot ./devops/helm/bot -n ${APP_ENV}
                     '''
                 }
