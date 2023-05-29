@@ -27,7 +27,6 @@ pipeline {
     stages {
         stage('DockerBuild') {
             steps {
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 sh '''
                 ./${SCRIPTS_DIR}/increment-version.sh ${BOT_DIR} ${VERSION_FILE}
                 version=$(cat ${BOT_DIR}/${VERSION_FILE})
@@ -39,7 +38,6 @@ pipeline {
         }
         stage('DockerPush') {
             steps {
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 sh '''
                 version=$(cat ${BOT_DIR}/${VERSION_FILE})
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
