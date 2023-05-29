@@ -18,7 +18,6 @@ pipeline {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
         GITHUB_TOKEN = credentials('github_access_token')
-        DOCKER_IMG = ''
         SCRIPTS_DIR = "devops/scripts"
         JENKINS_WS = "/var/lib/jenkins/workspace"
         BOT_DIR = "bot"
@@ -49,7 +48,7 @@ pipeline {
         }
         stage('Trigger- Deploy') {
             steps {
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
+                scmSkip(deleteBuild: false, skipPattern:'.*\\[ci skip\\].*')
                 sh '''
                 version=$(cat ${BOT_DIR}/${VERSION_FILE})
                 DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
