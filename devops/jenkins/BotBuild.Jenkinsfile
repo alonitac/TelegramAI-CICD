@@ -48,7 +48,6 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 sh '''
                 version=$(cat ${BOT_DIR}/${VERSION_FILE})
                 DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
