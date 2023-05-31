@@ -39,7 +39,7 @@ jobs:
       
       - name: docker build
         run: |
-          docker build -f bot/Dockerfile -t ${DOCKER_IMG} .
+          docker build -f bot/Dockerfile -t ${{ env.DOCKER_IMG }} .
 
       - name: docker push
         run: |
