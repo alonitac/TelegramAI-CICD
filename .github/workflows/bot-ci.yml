@@ -35,10 +35,10 @@ jobs:
       - name: Set Env Varibles
         run: |
           version=$(cat bot/VERSION)
-          echo "docker_img=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ env.GITHUB_HEAD }}/bot:$version" >> GITHUB_ENV
+          echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ env.GITHUB_HEAD }}/bot:$version" >> GITHUB_ENV
       - name: docker build
         run: |
-          docker build -f bot/Dockerfile -t ${{ env.DOCKER_REGISTRY }}/bot:test .
+          docker build -f bot/Dockerfile -t ${{ env.DOCKER_IMG }}/bot:test .
 
       - name: docker push
         run: |
