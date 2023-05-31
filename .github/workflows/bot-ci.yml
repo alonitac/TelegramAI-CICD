@@ -64,6 +64,9 @@ jobs:
     runs-on: ['self-hosted', 'Linux' , 'X64']
     steps:
       - uses: actions/checkout@v3
+        with:
+          github_token: ${{ env.GITHUB_TOKEN }}
+
 
       - name: Install yq
         run: |
@@ -80,7 +83,8 @@ jobs:
 
       - name: Git Push
         run: |
-          chmod u+x devops/scripts/git-push.sh
+          chmod u+x 
+          with:
           devops/scripts/git-push.sh "bot/VERSION devops/helm/bot/Chart.yaml devops/helm/bot/values.yaml" \
           ${{ github.ref_name }} '[ci skip] updated bot version'
         
