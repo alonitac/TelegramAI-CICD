@@ -42,13 +42,19 @@ jobs:
           version=$(cat bot/VERSION)
           echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/bot:${version}" >> $GITHUB_ENV
       
-      - name: docker build
+      - name: Docker Build
         run: |
           docker build -f bot/Dockerfile -t ${{ env.DOCKER_IMG }} .
+      
+      - uses: int128/create-ecr-repository-action@v1
+        if: github.ref_name == 'main'
+        with:
+          repository: ${{ env.DOCKER_NAMESPACE }}
 
-      - name: docker push
+      - name: Docker Push
+        if: github.ref_name == 'main'
         run: |
-          docker push -f bot/Dockerfile -t bot:test .
+          docker push ${{ env.DOCKER_IMG }}
 
   # update-helm:
   #   runs-on: ['self-hosted', 'Linux' , 'X64']
