@@ -83,8 +83,7 @@ jobs:
 
       - name: Git Push
         run: |
-          chmod u+x 
-          with:
+          chmod u+x devops/scripts/git-push.sh
           devops/scripts/git-push.sh "bot/VERSION devops/helm/bot/Chart.yaml devops/helm/bot/values.yaml" \
           ${{ github.ref_name }} '[ci skip] updated bot version'
         
