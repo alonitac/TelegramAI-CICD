@@ -54,6 +54,8 @@ jobs:
       - name: Docker Push
         if: github.ref_name == 'main'
         run: |
+          aws ecr get-login-password --region ${{ inputs.aws_region || env.AWS_REGION_DEFAULT }} | docker login \
+           --username AWS --password-stdin ${{ env.DOCKER_REGISTRY }}
           docker push ${{ env.DOCKER_IMG }}
 
   # update-helm:
