@@ -67,7 +67,7 @@ jobs:
 
       - name: Install yq
         run: |
-          RUN curl -sS -L https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64 -o /usr/local/bin/yq \
+          curl -sS -L https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64 -o /usr/local/bin/yq \
           && chmod +x /usr/local/bin/yq
       
       - name: Update Helm
