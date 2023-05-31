@@ -1,0 +1,20 @@
+name:
+on:
+  workflows_dispatch:
+    inputs:
+      test:
+       type:
+
+
+
+env:
+
+      
+
+jobs:
+  build-docker:
+    runs-on: ['self-hosted', 'Linux' , 'X64' ]
+    steps:
+      - name:
+        run: |
+          docker build -f bot/Dockerfile -t bot:test .
