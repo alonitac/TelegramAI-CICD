@@ -40,7 +40,7 @@ jobs:
       - name: Set Env Varibles
         run: |
           echo "SERVICE_VERSION=$(cat bot/VERSION)" >> $GITHUB_ENV
-          echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/bot:${SERVICE_VERSION}" >> $GITHUB_ENV
+          echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/bot:${{ env.SERVICE_VERSION }}" >> $GITHUB_ENV
       
       - name: Docker Build
         run: |
@@ -59,6 +59,7 @@ jobs:
           docker push ${{ env.DOCKER_IMG }}
 
   update-helm:
+    needs: [build-docker]
     runs-on: ['self-hosted', 'Linux' , 'X64']
     steps:
       - uses: actions/checkout@v3
