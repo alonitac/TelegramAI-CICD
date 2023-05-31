@@ -1,14 +1,6 @@
 name:
 on:
-  workflows_dispatch:
-    inputs:
-      test:
-       type:
-
-
-
-env:
-
+  workflow_dispatch:
       
 
 jobs:
