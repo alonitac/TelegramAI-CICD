@@ -7,11 +7,15 @@ on:
   workflow_dispatch:
     inputs:
       aws_region:
-        description: 'A username passed from the caller workflow'
-        default: 'eu-west-1'
+        description: 'AWS Region'
         type: choice
         options:
+          - ' '
+          - eu-west-1
           - us-east-1
+
+env:
+  AWS_REGION_DEFAULT: eu-west-1 
 
 jobs:
   build-docker:
@@ -24,7 +28,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ inputs.aws_region }}
+          aws-region: ${{ inputs.aws_region || env.AWS_REGION_DEFAULT }}
 
       - name: docker build
         run: |
