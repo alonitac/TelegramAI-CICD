@@ -33,7 +33,7 @@ pipeline {
                 version=$(cat ${WORKER_DIR}/${VERSION_FILE})
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo 'FULL_DOCKER_IMG is :' ${FULL_DOCKER_IMG}
-                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
+                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} . --build-arg ENV="dev"
                 '''
             }
         }
@@ -52,25 +52,29 @@ pipeline {
                 scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
                 sh '''
                 version=$(cat ${WORKER_DIR}/${VERSION_FILE})
+                DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
                 echo $FULL_DOCKER_IMG > "${WORKER_DIR}/latest_img_worker"
                 git config --global --add safe.directory ${INTERNAL_WS}
                 git config remote.origin.url "https://${GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
                 cat "${WORKER_DIR}/${VERSION_FILE}"
-                worker_image_name=$(cat worker/latest_img_worker)
-                echo "worker_image_name: ${worker_image_name}"
-                worker_img=${worker_image_name} yq -i '.spec.template.spec.containers[0].image=env(worker_img)' infra/k8s/worker.yaml
+                image_name=$(cat worker/latest_img_worker)
+                echo "image_name: ${image_name}"
+                version=${version} yq -i '.appVersion=env(version)' devops/helm/worker/Chart.yaml
+                docker_img=${DOCKER_IMG} yq -i '.image.repository=env(docker_img)' devops/helm/worker/values.yaml
+                echo "#### charts yaml:"
+                cat devops/helm/worker/Chart.yaml
+                echo "#### values yaml:"
+                cat devops/helm/worker/values.yaml
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
-                ./${SCRIPTS_DIR}/git-push.sh "${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker infra/k8s/worker.yaml"  \
-                     ${GIT_BRANCH##*/} '[ci skip] updated version from Jenkins Pipeline'
+                ./${SCRIPTS_DIR}/git-push.sh " devops/helm/worker/values.yaml ${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker devops/helm/worker/Chart.yaml" \
+                    ${GIT_BRANCH##*/} '[ci skip] updated version from Jenkins Pipeline'
                 '''
-                
-                build job: 'DeployWorker', wait: false
-                
             }
         }
      }
+
     post {
         // always {
         //     cleanWs(cleanWhenNotBuilt: false,
@@ -83,7 +87,11 @@ pipeline {
         // }
         success {
             echo 'I succeeded!'
-            echo 'Cleaning workspace... '
+            echo 'Cleaning workspace...'
+           // deleteDir() /* clean up our workspace */
+            // sh '''
+            // echo "sudo su - ec2-user find / -type f -name .terragrunt-cache -delete" 
+            // '''
         }
         unstable {
             echo 'I am unstable :/'
@@ -93,6 +101,6 @@ pipeline {
         }
         changed {
             echo 'Things were different before...'
-        }    
+        }
     }
 }

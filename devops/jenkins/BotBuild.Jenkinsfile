@@ -10,67 +10,72 @@ pipeline {
         string(name: 'ECRRegistry', defaultValue:'700935310038.dkr.ecr.eu-west-1.amazonaws.com')
         string(name: 'ECRRepo', defaultValue: 'tamir/jenkins')
         string(name: 'ImageTag', defaultValue: 'latest')
-        string(name: 'ImageName', defaultValue: 'worker')
-        string(name: 'DockerFilePath', defaultValue: 'worker/Dockerfile')
+        string(name: 'ImageName', defaultValue: 'bot')
+        string(name: 'DockerFilePath', defaultValue: 'bot/Dockerfile')
         string(name: 'FULL_DOCKER_IMG' , defaultValue: '')
     }
     environment {
         AWS_ACCESS_KEY    = credentials('AWS_ACCESS_KEY')
         AWS_ACCESS_SECRET = credentials('AWS_ACCESS_SECRET')
         GITHUB_TOKEN = credentials('github_access_token')
-        DOCKER_IMG = ''
         SCRIPTS_DIR = "devops/scripts"
         JENKINS_WS = "/var/lib/jenkins/workspace"
-        WORKER_DIR = "worker"
+        BOT_DIR = "bot"
         VERSION_FILE = "VERSION"
-        INTERNAL_WS = "/var/lib/jenkins/workspace/dev/worker/BuildWorker"
+        INTERNAL_WS = "/var/lib/jenkins/workspace/dev/bot/BuildBot"
     }
     stages {
         stage('DockerBuild') {
             steps {
                 sh '''
-                ./${SCRIPTS_DIR}/increment-version.sh ${WORKER_DIR} ${VERSION_FILE}
-                version=$(cat ${WORKER_DIR}/${VERSION_FILE})
+                ./${SCRIPTS_DIR}/increment-version.sh ${BOT_DIR} ${VERSION_FILE}
+                version=$(cat ${BOT_DIR}/${VERSION_FILE})
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo 'FULL_DOCKER_IMG is :' ${FULL_DOCKER_IMG}
-                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} .
+                docker build -f ${DockerFilePath} -t ${FULL_DOCKER_IMG} . --build-arg ENV="dev"
                 '''
             }
         }
         stage('DockerPush') {
             steps {
                 sh '''
-                version=$(cat ${WORKER_DIR}/${VERSION_FILE})
+                version=$(cat ${BOT_DIR}/${VERSION_FILE})
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${ECRRegistry}
                 docker push ${FULL_DOCKER_IMG}
                 '''
             }
         }
-        stage('Trigger- Deploy') {
+        stage('Deploy') {
             steps {
-                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
+                scmSkip(deleteBuild: false, skipPattern:'.*\\[ci skip\\].*')
                 sh '''
-                version=$(cat ${WORKER_DIR}/${VERSION_FILE})
+                version=$(cat ${BOT_DIR}/${VERSION_FILE})
+                DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}
                 FULL_DOCKER_IMG=${ECRRegistry}/${ECRRepo}/${GIT_BRANCH##*/}/${ImageName}:${version}
                 echo "FULL_DOCKER_IMG:" ${FULL_DOCKER_IMG}
-                echo $FULL_DOCKER_IMG > "${WORKER_DIR}/latest_img_worker"
+                echo $FULL_DOCKER_IMG > "${BOT_DIR}/latest_img_bot"
                 git config --global --add safe.directory ${INTERNAL_WS}
                 git config remote.origin.url "https://${GITHUB_TOKEN}@github.com/TamirNator/TelegramAI-CICD"
-                cat "${WORKER_DIR}/${VERSION_FILE}"
-                worker_image_name=$(cat worker/latest_img_worker)
-                echo "worker_image_name: ${worker_image_name}"
-                worker_img=${worker_image_name} yq -i '.spec.template.spec.containers[0].image=env(worker_img)' infra/k8s/worker.yaml
+                cat "${BOT_DIR}/${VERSION_FILE}"
+                bot_image_name=$(cat bot/latest_img_bot)
+                echo "bot_image_name: ${bot_image_name}"
+                bot_img=${bot_image_name} yq -i '.spec.template.spec.containers[0].image=env(bot_img)' infra/k8s/bot.yaml
+                bot_version=${version} yq -i '.appVersion=env(bot_version)' devops/helm/bot/Chart.yaml
+                docker_img=${DOCKER_IMG} yq -i '.image.repository=env(docker_img)' devops/helm/bot/values.yaml
+                echo "#### charts yaml:"
+                cat devops/helm/bot/Chart.yaml
+                echo "#### values yaml:"
+                cat devops/helm/bot/values.yaml
                 chmod u+x ./${SCRIPTS_DIR}/git-push.sh
-                ./${SCRIPTS_DIR}/git-push.sh "${WORKER_DIR}/${VERSION_FILE} ${WORKER_DIR}/latest_img_worker infra/k8s/worker.yaml"  \
-                     ${GIT_BRANCH##*/} '[ci skip] updated version from Jenkins Pipeline'
+                ./${SCRIPTS_DIR}/git-push.sh " devops/helm/bot/values.yaml ${BOT_DIR}/${VERSION_FILE} ${BOT_DIR}/latest_img_bot infra/k8s/bot.yaml devops/helm/bot/Chart.yaml" \
+                    ${GIT_BRANCH##*/} '[ci skip] updated version from Jenkins Pipeline'
                 '''
-                
-                build job: 'DeployWorker', wait: false
-                
+                // build job: 'DeployBot', wait: false
             }
         }
      }
+
     post {
         // always {
         //     cleanWs(cleanWhenNotBuilt: false,
@@ -83,7 +88,11 @@ pipeline {
         // }
         success {
             echo 'I succeeded!'
-            echo 'Cleaning workspace... '
+            echo 'Cleaning workspace...'
+           // deleteDir() /* clean up our workspace */
+            // sh '''
+            // echo "sudo su - ec2-user find / -type f -name .terragrunt-cache -delete" 
+            // '''
         }
         unstable {
             echo 'I am unstable :/'
@@ -93,6 +102,6 @@ pipeline {
         }
         changed {
             echo 'Things were different before...'
-        }    
+        }
     }
 }
