@@ -15,7 +15,9 @@ on:
           - us-east-1
 
 env:
-  AWS_REGION_DEFAULT: eu-west-1 
+  AWS_REGION_DEFAULT: eu-west-1
+  DOCKER_REGISTRY: 700935310038.dkr.ecr.eu-west-1.amazonaws.com
+  DOCKER_NAMESPACE: tamir
 
 jobs:
   build-docker:
@@ -29,10 +31,14 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.aws_region || env.AWS_REGION_DEFAULT }}
-
+      
+      - name: Set Env Varibles
+        run: |
+          $version=$(cat bot/VERSION)
+          ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ env.GITHUB_HEAD_REF }}/bot:$version >> GITHUB_ENV
       - name: docker build
         run: |
-          docker build -f bot/Dockerfile -t bot:test .
+          docker build -f bot/Dockerfile -t ${{ env.DOCKER_REGISTRY }}/bot:test .
 
       - name: docker push
         run: |
