@@ -75,7 +75,7 @@ jobs:
           yq -i '.appVersion = "${{ env.SERVICE_VERSION }}"' devops/helm/bot/Chart.yaml
 
   update-version:
-    needs: [build-docker]
+    needs: [update-helm]
     runs-on: ['self-hosted', 'Linux' , 'X64']
     steps:
       - uses: actions/checkout@v3
