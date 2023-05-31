@@ -73,6 +73,21 @@ jobs:
       - name: Update Helm
         run: |
           yq -i '.appVersion = "${{ env.SERVICE_VERSION }}"' devops/helm/bot/Chart.yaml
+
+  update-version:
+    needs: [build-docker]
+    runs-on: ['self-hosted', 'Linux' , 'X64']
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Increment Version
+        run: |
+          devops/scripts/increment-version.sh bot VERSION
+
+      - name: Git Push
+        run: |
+          devops/scripts/git-push.sh "bot/VERSION bot/latest_img_bot devops/helm/bot/Chart.yaml devops/helm/bot/values.yaml" \
+          ${{ github.ref_name }} '[ci skip] updated bot version'
         
 
         
