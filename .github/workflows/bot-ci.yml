@@ -72,7 +72,7 @@ jobs:
       
       - name: Update Helm
         run: |
-          version=${{ env.SERVICE_VERSION }} yq -i '.appVersion=env(version)' devops/helm/bot/Chart.yaml
+          yq -i '.appVersion = "${{ env.SERVICE_VERSION }}"' devops/helm/bot/Chart.yaml
         
 
         
