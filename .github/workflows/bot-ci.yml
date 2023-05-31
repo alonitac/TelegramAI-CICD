@@ -39,8 +39,8 @@ jobs:
       
       - name: Set Env Varibles
         run: |
-          version=$(cat bot/VERSION)
-          echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/bot:${version}" >> $GITHUB_ENV
+          echo "SERVICE_VERSION=$(cat bot/VERSION)" >> $GITHUB_ENV
+          echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/bot:${SERVICE_VERSION}" >> $GITHUB_ENV
       
       - name: Docker Build
         run: |
@@ -58,7 +58,19 @@ jobs:
            --username AWS --password-stdin ${{ env.DOCKER_REGISTRY }}
           docker push ${{ env.DOCKER_IMG }}
 
-  # update-helm:
-  #   runs-on: ['self-hosted', 'Linux' , 'X64']
-  #   steps:
-  #     - uses: actions/checkout@v3
+  update-helm:
+    runs-on: ['self-hosted', 'Linux' , 'X64']
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install yq
+        run: |
+          RUN curl -sS -L https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64 -o /usr/local/bin/yq \
+          && chmod +x /usr/local/bin/yq
+      
+      - name: Update Helm
+        run: |
+          version=${{ env.SERVICE_VERSION }} yq -i '.appVersion=env(version)' devops/helm/bot/Chart.yaml
+        
+
+        
