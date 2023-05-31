@@ -5,8 +5,9 @@ on:
 
 jobs:
   build-docker:
-    runs-on: ['self-hosted', 'Linux' , 'X64' ]
+    runs-on: ['self-hosted', 'Linux' , 'X64']
     steps:
+      - uses: actions/checkout@v3
       - name:
         run: |
           docker build -f bot/Dockerfile -t bot:test .
