@@ -1,4 +1,4 @@
-name:
+name: bot-ci
 on:
   push:
     branches:
@@ -36,9 +36,10 @@ jobs:
         run: |
           version=$(cat bot/VERSION)
           echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ env.GITHUB_HEAD }}/bot:$version" >> GITHUB_ENV
+      
       - name: docker build
         run: |
-          docker build -f bot/Dockerfile -t ${{ env.DOCKER_IMG }}/bot:test .
+          "docker build -f bot/Dockerfile -t ${{ env.DOCKER_IMG }} ."
 
       - name: docker push
         run: |
