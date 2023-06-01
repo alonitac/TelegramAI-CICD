@@ -93,7 +93,7 @@ jobs:
 
       - name: Increment Version
         run: |
-          ${{ env.SCRIPTS_DIR }}/increment-version.sh ${{ env.SERVICE_NAME }} 
+          ${{ env.SCRIPTS_DIR }}/increment-version.sh ${{ env.SERVICE_NAME }} ${{ env.VERSION_FILE }}
 
       - name: Git Push
         run: |
