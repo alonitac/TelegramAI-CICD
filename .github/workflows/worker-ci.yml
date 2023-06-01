@@ -1,0 +1,102 @@
+name: worker-ci
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      aws_region:
+        description: 'AWS Region'
+        type: choice
+        options:
+          - ' '
+          - eu-west-1
+          - us-east-1
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+  contents: write
+
+env:
+  AWS_REGION_DEFAULT: eu-west-1
+  DOCKER_REGISTRY: 700935310038.dkr.ecr.eu-west-1.amazonaws.com
+  DOCKER_NAMESPACE: tamir
+  SERVICE_NAME: worker
+  VERSION_FILE: VERSION
+  HELM_DIR: devops/helm
+  SCRIPTS_DIR: devops/scripts
+
+jobs:
+  build-docker:
+    runs-on: ['self-hosted', 'Linux' , 'X64']
+    outputs:
+      service-version: ${{ steps.serVars.outputs.SERVICE_VERSION }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.aws_region || env.AWS_REGION_DEFAULT }}
+      
+      - name: Set Env Varibles
+        id: serVars
+        run: |
+          version=$(cat ${{ env.SERVICE_NAME }}/${{ env.VERSION_FILE }})
+          echo "SERVICE_VERSION=${version}" >> $GITHUB_OUTPUT
+          echo "SERVICE_VERSION=${version}" >> $GITHUB_ENV
+          echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/${{ env.SERVICE_NAME }}:${version}" >> $GITHUB_ENV
+      
+      - name: Docker Build
+        run: |
+          docker build -f ${{ env.SERVICE_NAME }}/Dockerfile -t ${{ env.DOCKER_IMG }} .
+      
+      - uses: int128/create-ecr-repository-action@v1
+        if: contains(fromJSON('["main", "dev"]'), github.ref_name)
+        with:
+          repository: ${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/${{ env.SERVICE_NAME }}
+
+      - name: Docker Push
+        if: contains(fromJSON('["main", "dev"]'), github.ref_name)
+        run: |
+          aws ecr get-login-password --region ${{ inputs.aws_region || env.AWS_REGION_DEFAULT }} | docker login \
+           --username AWS --password-stdin ${{ env.DOCKER_REGISTRY }}
+          docker push ${{ env.DOCKER_IMG }}
+
+  update-version:
+    needs: [build-docker]
+    runs-on: ['self-hosted', 'Linux' , 'X64']
+    steps:
+
+      - uses: actions/checkout@v3
+        with:
+          github_token: ${{ env.GITHUB_TOKEN }}
+
+      - name: Install yq
+        run: |
+          sudo curl -sS -L https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64 -o /usr/bin/yq \
+          && sudo chmod +x /usr/bin/yq
+      
+      - name: Update Helm
+        run: |
+          yq -i '.appVersion = "${{ needs.build-docker.outputs.service-version }}"' ${{ env.HELM_DIR }}/${{ env.SERVICE_NAME }}/Chart.yaml
+
+      - name: Increment Version
+        run: |
+          ${{ env.SCRIPTS_DIR }}/increment-version.sh ${{ env.SERVICE_NAME }} ${{ env.VERSION_FILE }}
+
+      - name: Git Push
+        run: |
+          chmod u+x ${{ env.SCRIPTS_DIR }}/git-push.sh
+          ${{ env.SCRIPTS_DIR }}/git-push.sh "${{ env.SERVICE_NAME }}/${{ env.VERSION_FILE }} ${{ env.HELM_DIR }}/${{ env.SERVICE_NAME }}/Chart.yaml ${{ env.HELM_DIR }}/${{ env.SERVICE_NAME }}/values.yaml" \
+          ${{ github.ref_name }} '[ci skip] updated ${{ env.SERVICE_NAME }} version'        
