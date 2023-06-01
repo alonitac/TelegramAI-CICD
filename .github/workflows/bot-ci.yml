@@ -37,6 +37,8 @@ env:
 jobs:
   build-docker:
     runs-on: ['self-hosted', 'Linux' , 'X64']
+    outputs:
+      service-version: ${{ steps.serVars.outputs.SERVICE_VERSION }}
     steps:
       - uses: actions/checkout@v3
 
@@ -48,8 +50,10 @@ jobs:
           aws-region: ${{ inputs.aws_region || env.AWS_REGION_DEFAULT }}
       
       - name: Set Env Varibles
+        id: serVars
         run: |
           version=$(cat ${{ env.SERVICE_NAME }}/${{ env.VERSION_FILE }})
+          echo "SERVICE_VERSION=${version}" >> $GITHUB_OUTPUT
           echo "SERVICE_VERSION=${version}" >> $GITHUB_ENV
           echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/${{ env.SERVICE_NAME }}:${version}" >> $GITHUB_ENV
       
@@ -85,7 +89,7 @@ jobs:
       
       - name: Update Helm
         run: |
-          yq -i '.appVersion = "${{ env.SERVICE_VERSION }}"' ${{ env.HELM_DIR }}/${{ env.SERVICE_NAME }}/Chart.yaml
+          yq -i '.appVersion = "${{ needs.build-docker.outputs.service-version }}"' ${{ env.HELM_DIR }}/${{ env.SERVICE_NAME }}/Chart.yaml
 
       - name: Increment Version
         run: |
