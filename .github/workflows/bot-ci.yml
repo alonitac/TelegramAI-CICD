@@ -1,9 +1,12 @@
-name: bot-ci
+name: ${{ env.SERVICE_NAME }}-ci
 on:
   push:
     branches:
       - main
       - dev
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       aws_region:
@@ -26,6 +29,10 @@ env:
   AWS_REGION_DEFAULT: eu-west-1
   DOCKER_REGISTRY: 700935310038.dkr.ecr.eu-west-1.amazonaws.com
   DOCKER_NAMESPACE: tamir
+  SERVICE_NAME: bot
+  VERSION_FILE: VERSION
+  HELM_DIR: devops/helm
+  SCRIPTS_DIR: devops/scripts
 
 jobs:
   build-docker:
@@ -42,21 +49,21 @@ jobs:
       
       - name: Set Env Varibles
         run: |
-          version=$(cat bot/VERSION)
+          version=$(cat ${{ env.SERVICE_NAME }}/${{ env.VERSION_FILE }})
           echo "SERVICE_VERSION=${version}" >> $GITHUB_ENV
-          echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/bot:${version}" >> $GITHUB_ENV
+          echo "DOCKER_IMG=${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/${{ env.SERVICE_NAME }}:${version}" >> $GITHUB_ENV
       
       - name: Docker Build
         run: |
-          docker build -f bot/Dockerfile -t ${{ env.DOCKER_IMG }} .
+          docker build -f ${{ env.SERVICE_NAME }}/Dockerfile -t ${{ env.DOCKER_IMG }} .
       
       - uses: int128/create-ecr-repository-action@v1
-        if: github.ref_name == 'main'
+        if: contains(fromJSON('["main", "dev"]'), github.ref_name)
         with:
-          repository: ${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/bot
+          repository: ${{ env.DOCKER_NAMESPACE }}/${{ github.ref_name }}/${{ env.SERVICE_NAME }}
 
       - name: Docker Push
-        if: github.ref_name == 'main'
+        if: contains(fromJSON('["main", "dev"]'), github.ref_name)
         run: |
           aws ecr get-login-password --region ${{ inputs.aws_region || env.AWS_REGION_DEFAULT }} | docker login \
            --username AWS --password-stdin ${{ env.DOCKER_REGISTRY }}
@@ -66,10 +73,10 @@ jobs:
     needs: [build-docker]
     runs-on: ['self-hosted', 'Linux' , 'X64']
     steps:
+
       - uses: actions/checkout@v3
         with:
           github_token: ${{ env.GITHUB_TOKEN }}
-
 
       - name: Install yq
         run: |
@@ -78,17 +85,14 @@ jobs:
       
       - name: Update Helm
         run: |
-          yq -i '.appVersion = "${{ env.SERVICE_VERSION }}"' devops/helm/bot/Chart.yaml
+          yq -i '.appVersion = "${{ env.SERVICE_VERSION }}"' ${{ env.SCRIPTS_DIR }}/${{ env.SERVICE_NAME }}/Chart.yaml
 
       - name: Increment Version
         run: |
-          devops/scripts/increment-version.sh bot VERSION
+          ${{ env.SCRIPTS_DIR }}/increment-version.sh ${{ env.SERVICE_NAME }} 
 
       - name: Git Push
         run: |
-          chmod u+x devops/scripts/git-push.sh
-          devops/scripts/git-push.sh "bot/VERSION devops/helm/bot/Chart.yaml devops/helm/bot/values.yaml" \
-          ${{ github.ref_name }} '[ci skip] updated bot version'
-        
-
-        
+          chmod u+x ${{ env.SCRIPTS_DIR }}/git-push.sh
+          ${{ env.SCRIPTS_DIR }}/git-push.sh "${{ env.SERVICE_NAME }}/${{ env.VERSION_FILE }} ${{ env.HELM_DIR }}/${{ env.SERVICE_NAME }}/Chart.yaml ${{ env.HELM_DIR }}/${{ env.SERVICE_NAME }}/values.yaml" \
+          ${{ github.ref_name }} '[ci skip] updated ${{ env.SERVICE_NAME }} version'        
