@@ -1,4 +1,4 @@
-name: ${{ env.SERVICE_NAME }}-ci
+name: bot-ci
 on:
   push:
     branches:
