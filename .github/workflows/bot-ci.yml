@@ -85,11 +85,11 @@ jobs:
       
       - name: Update Helm
         run: |
-          yq -i '.appVersion = "${{ env.SERVICE_VERSION }}"' ${{ env.SCRIPTS_DIR }}/${{ env.SERVICE_NAME }}/Chart.yaml
+          yq -i '.appVersion = "${{ env.SERVICE_VERSION }}"' ${{ env.HELM_DIR }}/${{ env.SERVICE_NAME }}/Chart.yaml
 
       - name: Increment Version
         run: |
-          ${{ env.SCRIPTS_DIR }}/increment-version.sh ${{ env.SERVICE_NAME }} 
+          ${{ env.HELM_DIR }}/increment-version.sh ${{ env.SERVICE_NAME }} 
 
       - name: Git Push
         run: |
